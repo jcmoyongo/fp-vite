@@ -1,0 +1,31 @@
+ShortName,Name,FullName,NickName,Arena,Division,Conference,City,RoadGames,HomeGames,TotalGames
+ATL,Atlanta,Atlanta Hawks,Hawks,State Farm Arena,Southeast,East,"Atlanta, Georgia",41,41,82
+BOS,Boston,Boston Celtics,Celtics,TD Garden,Atlantic,East,"Boston, Massachusetts",41,41,82
+BKN,Brooklyn,Brooklyn Nets,Nets,Barclays Center,Atlantic,East,"Brooklyn, New York",41,41,82
+CHA,Charlotte,Charlotte Hornets,Hornets,Spectrum Center,Southeast,East,"Charlotte, North Carolina",41,41,82
+CHI,Chicago,Chicago Bulls,Bulls,United Center,Central,East,"Chicago, Illinois",41,41,82
+CLE,Cleveland,Cleveland Cavaliers,Cavaliers,Rocket Mortgage FieldHouse,Central,East,"Cleveland, Ohio",41,41,82
+DAL,Dallas,Dallas Mavericks,Mavericks,American Airlines Center,Southwest,West,"Dallas, Texas",41,41,82
+DEN,Denver,Denver Nuggets,Nuggets,Ball Arena,Northwest,West,"Denver, Colorado",41,41,82
+DET,Detroit,Detroit Pistons,Pistons,Little Caesars Arena,Central,East,"Detroit, Michigan",41,41,82
+GSW,Golden State,Golden State Warriors,Warriors,Chase Center,Pacific,West,"San Francisco, California",41,41,82
+HOU,Houston,Houston Rockets,Rockets,Toyota Center,Southwest,West,"Houston, Texas",41,41,82
+IND,Indiana,Indiana Pacers,Pacers,Bankers Life Fieldhouse,Central,East,"Indianapolis, Indiana",41,41,82
+LAC,LA Clippers,Los Angeles Clippers,Clippers,Staples Center,Pacific,West,"Los Angeles, California",41,41,82
+LAL,LA Lakers,Los Angeles Lakers,Lakers,Staples Center,Pacific,West,"Los Angeles, California",41,41,82
+MEM,Memphis,Memphis Grizzlies,Grizzlies,FedExForum,Southwest,West,"Memphis, Tennessee",41,41,82
+MIA,Miami,Miami Heat,Heat,American Airlines Arena,Southeast,East,"Miami, Florida",41,41,82
+MIL,Milwaukee,Milwaukee Bucks,Bucks,Fiserv Forum,Central,East,"Milwaukee, Wisconsin",41,41,82
+MIN,Minnesota,Minnesota Timberwolves,Timberwolves,Target Center,Northwest,West,"Minneapolis, Minnesota",41,41,82
+NOP,New Orleans,New Orleans Pelicans,Pelicans,Smoothie King Center,Southwest,West,"New Orleans, Louisiana",41,41,82
+NYK,New York,New York Knicks,Knicks,Madison Square Garden,Atlantic,East,"New York City, New York",41,41,82
+OKC,Oklahoma City,Oklahoma City Thunder,Thunder,Chesapeake Energy Arena,Northwest,West,"Oklahoma City, Oklahoma",41,41,82
+ORL,Orlando,Orlando Magic,Magic,Amway Center,Southeast,East,"Orlando, Florida",41,41,82
+PHI,Philadelphia,Philadelphia 76ers,76ers,Wells Fargo Center,Atlantic,East,"Philadelphia, Pennsylvania",41,41,82
+PHO,Phoenix,Phoenix Suns,Suns,PHX Arena,Pacific,West,"Phoenix, Arizona",41,41,82
+POR,Portland,Portland Trail Blazers,Trail Blazers,Moda Center,Northwest,West,"Portland, Oregon",41,41,82
+SAC,Sacramento,Sacramento Kings,Kings,Golden 1 Center,Pacific,West,"Sacramento, California",41,41,82
+SAN,San Antonio,San Antonio Spurs,Spurs,AT&T Center,Southwest,West,"San Antonio, Texas",41,41,82
+TOR,Toronto,Toronto Raptors,Raptors,Amalie Arena,Atlantic,East,"Tampa, Florida",41,41,82
+UTA,Utah,Utah Jazz,Jazz,Vivint Smart Home Arena,Northwest,West,"Salt Lake City, Utah",41,41,82
+WAS,Washington,Washington Wizards,Wizards,Capital One Arena,Southeast,East,"Washington, D.C.",41,41,82
