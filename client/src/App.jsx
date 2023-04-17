@@ -30,7 +30,7 @@ const App = () => {
         <div className="grid grid-rows-3-[10rem_10rem_1fr] mt-10">
             <div className="flex gradient-bg-welcome rounded-t-lg mx-8 p-2 flex justify-start items-center text-xl font-light text-white">
                 <img className="w-32" src="./images/fp_120.png"/>
-                Franchise Players - Playoff ccc NBA  Saison {new Date().getFullYear()} 
+                Franchise Players - Playoff NBA  Saison {new Date().getFullYear()} 
             </div>
             <div className="flex light-green mx-8 p-2 min-h-100 h-100">
                 <div className="flex w-full justify-center items-center">
