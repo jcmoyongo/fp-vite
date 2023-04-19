@@ -24,15 +24,20 @@ export const GameContextProvider = ({children}) => {
     const [bets, setBets] = useState([]);
     const [series, setSeries] = useState([]); 
     const [isRefreshed, setIsRefreshed] = useState([]); 
+    const [daysBack, setDaysBack] = useState(7)
 
     const handleChange = (e) => {
-        setSelectedDate(e.value);
-        console.log(dayGames);
+        if (e === null) {
+            setSeries([]);
+        }
+        else {
+            setSelectedDate(e.value);
+            downloadSeries(e.value);
+        }
 
-        downloadSeries(e.value);
+  
         //const games = allGames.filter(g => moment(g.Day).format('L') === e.value);
-        setDayGames(series);
-        console.log(series);
+        setDayGames(series); //Updating late...
         setIsAllBets(false);
         setBets([]);
     };
@@ -43,8 +48,8 @@ export const GameContextProvider = ({children}) => {
                 ...new Map(allGames.map((item) => [item["Day"], item])).values(),
             ].map((game, key) =>{ 
                 return {id: key, value: moment(game.Day).format('L'), label:  moment(game.Day).format('L')}
-            }).filter(date => date.value >=  moment(new Date()).format('L') );
-
+            }).filter(date => date.value >=  moment((new Date()).setDate((new Date()).getDate() - daysBack)).format('L') );
+            // moment((new Date()).setDate((new Date()).getDate() -X)).format('L') ); to back X days
             setScheduleList(uniqueDates)
 
         } catch(error){
@@ -61,11 +66,10 @@ export const GameContextProvider = ({children}) => {
             return [year, month, day].join('-');
           }
         try {
-                console.log("Fetching serie...");
+                //console.log("Fetching series...");
                 const fmtDate = formatDate(new Date(date));
                 const season = "POST";
                 const endpoint =  `${serieByDateAPI}${fmtDate}?key=${sportsDataIOAPIKey}`; 
-                console.log(endpoint);
 
                 const response = await fetch(endpoint);
                 const data = await response.json();
@@ -74,7 +78,7 @@ export const GameContextProvider = ({children}) => {
                 const daySeries = data.map(serie => {return {...serie, Winner:""}}); 
                 //setTodos({...todos, [todo.id]: todo});
                 setSeries(daySeries);
-                console.log(daySeries);
+                //console.log(daySeries);
 
         } catch(error){
             console.log(error);
@@ -96,7 +100,7 @@ export const GameContextProvider = ({children}) => {
 
             if ((isNoGames || isStaleSchedule) && !isRefreshed) { 
                 const year = new Date().getFullYear();
-                console.log("Fetching from API...");
+                //console.log("Fetching from API...");
                 const season = "POST";
                 //const endpoint = `${scheduleAPI}${year}${season}?key=${sportsDataIOAPIKey}`; 
                 const endpoint = `${scheduleAPI}${year}${season}?key=${postSeasonAPI}`; 
@@ -128,7 +132,7 @@ export const GameContextProvider = ({children}) => {
             gameList, setGameList, 
             selectedDate, setSelectedDate, handleChange, formData, 
             dayGames, setDayGames, isAllBets, setIsAllBets, 
-            allGames, teamList, isPastDate, setIsPastDate, bets, setBets, downloadSeries}}
+            allGames, teamList, bets, setBets, downloadSeries, series}}
         >
             {children}
         </GameContext.Provider>

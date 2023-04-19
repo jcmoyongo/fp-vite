@@ -100,6 +100,21 @@ body {
   background-color: #223;
 }
 
+.status-final {
+  color:  #fa0303;
+
+}
+.status-scheduled {
+  text-decoration: #028b30;
+
+}
+.status-inprogress {
+  text-decoration: #c74a02;
+
+}
+
+
+
 html {
   height: 100%;
   background: #223;

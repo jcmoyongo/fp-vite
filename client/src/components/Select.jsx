@@ -20,7 +20,7 @@ const SelectComponent = () => {
       );
 
     return (    
-        <div className="flex flex-wrap justify-center items-center">
+        <div className="flex flex-wrap justify-center items-cente m-1">
           <Select
             placeholder="Choisir une date de match..."
             className="basic-single"

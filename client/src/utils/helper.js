@@ -11,6 +11,13 @@ export const SeasonType = {
         AllStar: 4
 };
 
+export const GameStatus = {
+    Final: 0,
+    InProgress: 1,
+    Scheduled: 2,
+    FinalOT: 3
+}
+
 //The type of season that this record corresponds to (1=Regular Season, 2=Preseason, 3=Postseason, 4=Offseason, 5=AllStar).
 export const  GetTeamName = (acro, what = 0) => {
     const {teamList} = useContext(GameContext);   
@@ -61,4 +68,57 @@ export const ArrayToString = (arr, separator) => {
     }
 }
 
+export const getStatusColor = (status) => {
+    //{`flex justify-center text-sm w-32 text-${color}-500`}>
+    try {     
 
+        switch(status) {
+            case "Final":
+                return "text-red-600";
+            case "F/OT":
+                return "text-red-600";
+            case "InProgress":
+                return "text-green-600"
+            case "Scheduled":
+                 return "text-blue-600"
+            default:
+                return "";
+          }
+    } catch(error){
+        console.log(error);
+        return "";
+    }   
+}
+
+export const getWinnerFontColor = (game, team) => {
+    //{`flex justify-center text-sm w-32 text-${color}-500`}>
+    try {     
+        switch(team) {
+            case game.HomeTeam:
+                return game.HomeTeamScore < game.AwayTeamScore?"text-gray-400":"";
+            case game.AwayTeam:
+                return game.AwayTeamScore < game.HomeTeamScore?"text-gray-400":"";
+            default:
+                return "";
+          }
+    } catch(error){
+        console.log(error);
+        return "";
+    }   
+}
+
+export const getSeriesStatus = (game) => {
+    const series = game.SeriesInfo;
+    let message;
+    if (series.GameNumber === undefined || series.GameNumber === 0) { message = "Série en attente (0 - 0 )"}
+    if (series.GameNumber > 0) {
+        if (series.HomeTeamWins > series.AwayTeamWins) {
+            message = `Match ${series.GameNumber} (${game.HomeTeam} mène ${series.HomeTeamWins} - ${series.AwayTeamWins})`
+        } else if (series.HomeTeamWins < series.AwayTeamWins) {
+            message = `Match ${series.GameNumber} (${game.AwayTeam} mène ${series.AwayTeamWins} - ${series.HomeTeamWins})`
+        } else {
+            message = `Match ${series.GameNumber} (Série à égalité ${series.HomeTeamWins} - ${series.AwayTeamWins})`
+        }
+    }
+    return message;
+}
