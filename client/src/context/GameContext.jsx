@@ -15,27 +15,26 @@ export const GameContextProvider = ({children}) => {
     const [formData, setformData] = useState({ dateSelected: "01/01/2000"});
     const [gameList, setGameList] = useState(games.map(g => g));
     const [scheduleList, setScheduleList ]= useState(games_sd.map(s => s));
-    const [selectedDate, setSelectedDate] = useState();
+    const [selectedDate, setSelectedDate] = useState(null);
     const [dayGames, setDayGames] = useState([]);
     const [isAllBets, setIsAllBets] =  useState(false);
-    const [isPastDate, setIsPastDate] = useState(false);
     const [allGames, setAllGames] = useState(games_sd.map(d => {return {...d, Winner:""}})); //We're adding the Winnder column to the array object.
     const [teamList, setTeamList] = useState(teams.map(t => t));
     const [bets, setBets] = useState([]);
     const [series, setSeries] = useState([]); 
     const [isRefreshed, setIsRefreshed] = useState([]); 
-    const [daysBack, setDaysBack] = useState(7)
+    const [daysBack, setDaysBack] = useState(5)
 
     const handleChange = (e) => {
         if (e === null) {
             setSeries([]);
+            setSelectedDate(null);
         }
         else {
             setSelectedDate(e.value);
             downloadSeries(e.value);
         }
 
-  
         //const games = allGames.filter(g => moment(g.Day).format('L') === e.value);
         setDayGames(series); //Updating late...
         setIsAllBets(false);
@@ -50,7 +49,7 @@ export const GameContextProvider = ({children}) => {
                 return {id: key, value: moment(game.Day).format('L'), label:  moment(game.Day).format('L')}
             }).filter(date => date.value >=  moment((new Date()).setDate((new Date()).getDate() - daysBack)).format('L') );
             // moment((new Date()).setDate((new Date()).getDate() -X)).format('L') ); to back X days
-            setScheduleList(uniqueDates)
+            setScheduleList(uniqueDates);
 
         } catch(error){
             console.log(error);
@@ -74,12 +73,10 @@ export const GameContextProvider = ({children}) => {
                 const response = await fetch(endpoint);
                 const data = await response.json();
 
-                //Status = InProgress //IsClosed
                 const daySeries = data.map(serie => {return {...serie, Winner:""}}); 
-                //setTodos({...todos, [todo.id]: todo});
-                setSeries(daySeries);
-                //console.log(daySeries);
-
+  
+                setSeries([...daySeries, ...daySeries.map(s=>s)]);
+                //console.log([...daySeries, ...daySeries.map(s=>s)]);
         } catch(error){
             console.log(error);
         }
@@ -102,8 +99,7 @@ export const GameContextProvider = ({children}) => {
                 const year = new Date().getFullYear();
                 //console.log("Fetching from API...");
                 const season = "POST";
-                //const endpoint = `${scheduleAPI}${year}${season}?key=${sportsDataIOAPIKey}`; 
-                const endpoint = `${scheduleAPI}${year}${season}?key=${postSeasonAPI}`; 
+                const endpoint = `${scheduleAPI}${year}${season}?key=${sportsDataIOAPIKey}`; 
                 const response = await fetch(endpoint);
                 const data = await response.json();
 
@@ -111,8 +107,6 @@ export const GameContextProvider = ({children}) => {
                 setAllGames(gamesWithWinner);
                 setIsRefreshed(true);
             }
-
-
         } catch(error){
             console.log(error);
         }
@@ -121,10 +115,10 @@ export const GameContextProvider = ({children}) => {
     useEffect(() => {
         downloadAllGames(); 
         getSchedule();
-    }, [bets]
+    }, [bets, series, selectedDate]
     );
 
-    //useEffect(() => {  console.log(allGames);});
+
 
     return (
         <GameContext.Provider

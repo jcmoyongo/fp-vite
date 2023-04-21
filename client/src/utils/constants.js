@@ -1,3 +1,4 @@
+export const facebookAppID = "1561062554263407";
 export const sportsDataIOAPIKey = "357fa5f8551c41cea6afc56a1345c611";
 //ScheduleBasic
 export const scheduleAPI = "https://api.sportsdata.io/v3/nba/scores/json/SchedulesBasic/"
@@ -15,3 +16,27 @@ export const serieByDateAPI = "https://api.sportsdata.io/v3/nba/scores/json/Scor
 
 
 //STATUS = Final, InProgress, Scheduled, F/OT
+//npm run dev -- --https
+//npm i vite-plugin-mkcert -D
+/*
+GraphRequest request = GraphRequest.newGraphPathRequest(
+    accessToken,
+    "/680010455356375",
+    new GraphRequest.Callback() {
+      @Override
+      public void onCompleted(GraphResponse response) {
+        // Insert your code here
+      }
+  });
+  
+  request.executeAsync();
+
+  FB.api(
+    '/680010455356375',
+    'POST',
+    {"message":"Hello World!"},
+    function(response) {
+        // Insert your code here
+    }
+  );
+*/

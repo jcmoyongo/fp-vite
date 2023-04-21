@@ -90,6 +90,26 @@ export const getStatusColor = (status) => {
     }   
 }
 
+export const translateStatus = (status) => {
+    try {     
+        switch(status) {
+            case "Final":
+                return "Terminé";
+            case "F/OT":
+                return "T/PROL";
+            case "InProgress":
+                return "En Cours"
+            case "Scheduled":
+                 return "Programmé"
+            default:
+                return status;
+          }
+    } catch(error){
+        console.log(error);
+        return "";
+    }   
+}
+
 export const getWinnerFontColor = (game, team) => {
     //{`flex justify-center text-sm w-32 text-${color}-500`}>
     try {     
@@ -122,3 +142,58 @@ export const getSeriesStatus = (game) => {
     }
     return message;
 }
+
+export const timeAgo = (time) => {
+
+    switch (typeof time) {
+      case 'number':
+        break;
+      case 'string':
+        time = +new Date(time);
+        break;
+      case 'object':
+        if (time.constructor === Date) time = time.getTime();
+        break;
+      default:
+        time = +new Date();
+    }
+    var time_formats = [
+      [60, 'secondes', 1], // 60
+      [120, '1 minute', 'Dans 1 minute'], // 60*2
+      [3600, 'minutes', 60], // 60*60, 60
+      [7200, '1 heure', 'Dans 1 heure'], // 60*60*2
+      [86400, 'heures', 3600], // 60*60*24, 60*60
+      [172800, 'Hier', 'Demain'], // 60*60*24*2
+      [604800, 'jours', 86400], // 60*60*24*7, 60*60*24
+      [1209600, '1 semaine', 'Prochaine sem'], // 60*60*24*7*4*2
+      [2419200, 'semaines', 604800], // 60*60*24*7*4, 60*60*24*7
+      [4838400, '1 mois', 'Mois prochain'], // 60*60*24*7*4*2
+      [29030400, 'mois', 2419200], // 60*60*24*7*4*12, 60*60*24*7*4
+      [58060800, '1 an', '-1 an'], // 60*60*24*7*4*12*2
+      [2903040000, 'années', 29030400], // 60*60*24*7*4*12*100, 60*60*24*7*4*12
+      [5806080000, '1 siècle', '-1 siècle'], // 60*60*24*7*4*12*100*2
+      [58060800000, 'siècle', 2903040000] // 60*60*24*7*4*12*100*20, 60*60*24*7*4*12*100
+    ];
+    var seconds = (+new Date() - time) / 1000,
+      token = '+',
+      list_choice = 1;
+  
+    if (seconds == 0) {
+      return 'Maintenant'
+    }
+    if (seconds < 0) {
+      seconds = Math.abs(seconds);
+      token = 'Dans';
+      list_choice = 2;
+    }
+    var i = 0,
+      format;
+    while (format = time_formats[i++])
+      if (seconds < format[0]) {
+        if (typeof format[2] == 'string')
+          return format[list_choice];
+        else
+          return token + Math.floor(seconds / format[2]) + ' ' + format[1];
+      }
+    return time;
+  }

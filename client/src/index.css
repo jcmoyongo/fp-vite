@@ -6,6 +6,13 @@
   box-sizing: border-box;
 }
 
+html {
+  height: 100%;
+  background: #223;
+  display: inline flex;
+  place-items: center;
+}
+
 body {
   margin: 0;
   font-family: "Open Sans", sans-serif;
@@ -113,13 +120,13 @@ body {
 
 }
 
+.schedule-row:nth-child(odd) {
+  background-color: #f9f9f9;
+}
 
-
-html {
-  height: 100%;
-  background: #223;
-  display: inline flex;
-  place-items: center;
+.layout {
+  display: grid;
+  grid-template-rows: min-content 1fr min-content;
 }
 
 @tailwind base;
