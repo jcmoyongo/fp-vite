@@ -1,16 +1,13 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Select from 'react-select';
 import { GameContext } from '../context/GameContext';
 
 
 const SelectComponent = () => {
     const [isClearable, setIsClearable] = useState(true);
-    const [isSearchable, setIsSearchable] = useState(true);
-    const [isDisabled, setIsDisabled] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [isRtl, setIsRtl] = useState(false);
      
-    const {scheduleList, handleChange} = useContext(GameContext);
+    const {scheduleList, handleChange, selectedDate, series} = useContext(GameContext);
 
     const Checkbox = ({ children, ...props }) => (
         <label style={{ marginRight: '1em' }}>
@@ -18,34 +15,27 @@ const SelectComponent = () => {
           {children}
         </label>
       );
-
+    
     return (    
-        <div className="flex flex-wrap justify-center items-cente m-1">
+        <div className="flex my-1 w-full">
           <Select
-            placeholder="Choisir une date de match..."
-            className="basic-single"
+            placeholder="Choisir une date..."
+            className="basic-single rounded-l-lg"
             classNamePrefix="select"
             isLoading={isLoading}
             isClearable={isClearable}
             options={ scheduleList}
-            onChange={handleChange} /> 
-            {/*<div
-                style={{
-                color: 'hsl(0, 0%, 40%)',
-                display: 'inline-block',
-                fontSize: 12,
-                fontStyle: 'italic',
-                marginTop: '1em',
-                }}
-            >
-                <Checkbox
-                    checked={isClearable}
-                    onChange={() => setIsClearable((state) => !state)}
-                >
-                    Clearable
-                </Checkbox>
-            </div>*/}
-
+            onChange={handleChange} 
+            theme={(theme) => ({
+                ...theme,
+                borderRadius: 5,
+                colors: {
+                  ...theme.colors,
+                  primary25: '#e5faff',
+                  primary: '#00a2c7',
+                },
+              })}
+            /> 
         </div>
 
     );

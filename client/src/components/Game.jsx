@@ -3,7 +3,8 @@ import { GameContext } from "../context/GameContext";
 import {RadioButtonComponent} from "../components/RadioButton"
 import {GetStadiumName, GetTeamAcronym, GetTeamName} from "../utils/helper";
 import moment from "moment";
-import {getStatusColor, getSeriesStatus, getWinnerFontColor} from '../utils/helper'
+import 'moment/locale/fr';
+import {getStatusColor, getSeriesStatus, getWinnerFontColor, translateStatus, timeAgo} from '../utils/helper'
 
 const Game = ({game}) =>{
     const [winner, setWinner] = useState();
@@ -23,6 +24,20 @@ const Game = ({game}) =>{
 
         const dayBets = series.filter(g => g.Status == "Scheduled").map(g => g.Winner);
         setBets(dayBets);
+        FB.ui(
+            {
+              method: 'share',
+              href: 'https://developers.facebook.com/docs/',
+            },
+            // callback
+            function(response) {
+              if (response && !response.error_message) {
+                alert('Posting completed.');
+              } else {
+                alert('Error while posting.');
+              }
+            }
+          );
     };
 
     const homeTeam = GetTeamName(game.HomeTeam);
@@ -67,21 +82,21 @@ const Game = ({game}) =>{
                     </div>
                 </div>         
             </div> 
-            <div className="flex flex-col items-left justify-center w-32">
-                <p className={`mx-1 font-bold ${getWinnerFontColor(game, game.HomeTeam)}`}>{game.HomeTeamScore}</p>
-                <p className={`mx-1 font-bold ${getWinnerFontColor(game, game.AwayTeam)}`}>{game.AwayTeamScore}</p>
+            <div className="flex flex-col items-left justify-center w-16">
+                <p className={`mx-1  ${getWinnerFontColor(game, game.HomeTeam)}`}>{game.HomeTeamScore}</p>
+                <p className={`mx-1  ${getWinnerFontColor(game, game.AwayTeam)}`}>{game.AwayTeamScore}</p>
             </div>
             <div className="flex flex-col border-l-2 items-center justify-center w-36">       
                 <div className="flex text-sm">
-                    {moment(game.DateTime).format('LT')}
+                    {game.DateTime === null?"Pas fixée":moment(game.DateTime).format('LT')}
+                </div>
+                <div className={`flex text-center text-xs ${color}`}>
+                    {game.Status.toString().startsWith("F")
+                    ? timeAgo(moment(game.DateTime))
+                    : translateStatus(game.Status)}
                 </div>
                 <div className={`flex text-xs ${color}`}>
-                    {game.Status.toString().toString().startsWith("F")
-                    ? moment(game.DateTime).startOf('hour').fromNow()
-                    : game.Status}
-                </div>
-                <div className={`flex text-xs ${color}`}>
-                    {game.Status === "F/OT"?"OT":""}
+                    {game.Status === "F/OT"?"PROL":""}
                 </div>
             </div>             
         </div>
