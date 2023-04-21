@@ -75,7 +75,7 @@ export const GameContextProvider = ({children}) => {
 
                 const daySeries = data.map(serie => {return {...serie, Winner:""}}); 
   
-                setSeries([...daySeries, ...daySeries.map(s=>s)]);
+                setSeries(daySeries);
                 //console.log([...daySeries, ...daySeries.map(s=>s)]);
         } catch(error){
             console.log(error);

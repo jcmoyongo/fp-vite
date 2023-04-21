@@ -52,7 +52,7 @@ const App = () => {
   };
 
   return (  
-    <div className="min-h-[70px] sm:px-0 sm:min-w-[120px] bg-white" >
+    <div className="min-h-[70px] sm:px-0 sm:min-w-[120px]" >
         <div className="flex grid grid-rows mt-5">
             <div className="flex gradient-bg-welcome rounded-t-lg mx-5 p-2 flex justify-start items-center text-xl 
             text-base font-bold text-white">
