@@ -20,24 +20,10 @@ const Game = ({game}) =>{
         setGameList(dayGames);
         //This is how we know a winner has been selected for all of the day's games.
         const isAllBets = series.every(g => g.Winner !== "");
-        setIsAllBets(isAllBets)
+        setIsAllBets(isAllBets);
 
         const dayBets = series.filter(g => g.Status == "Scheduled").map(g => g.Winner);
         setBets(dayBets);
-        FB.ui(
-            {
-              method: 'share',
-              href: 'https://developers.facebook.com/docs/',
-            },
-            // callback
-            function(response) {
-              if (response && !response.error_message) {
-                alert('Posting completed.');
-              } else {
-                alert('Error while posting.');
-              }
-            }
-          );
     };
 
     const homeTeam = GetTeamName(game.HomeTeam);
@@ -92,7 +78,7 @@ const Game = ({game}) =>{
                 </div>
                 <div className={`flex text-center text-xs ${color}`}>
                     {game.Status.toString().startsWith("F")
-                    ? timeAgo(moment(game.DateTime))
+                    ? timeAgo(moment(game.GameEndDateTime))
                     : translateStatus(game.Status)}
                 </div>
                 <div className={`flex text-xs ${color}`}>

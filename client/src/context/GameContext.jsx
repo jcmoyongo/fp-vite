@@ -73,7 +73,7 @@ export const GameContextProvider = ({children}) => {
                 const response = await fetch(endpoint);
                 const data = await response.json();
 
-                const daySeries = data.map(serie => {return {...serie, Winner:""}}); 
+                const daySeries = data.map(serie => {return {...serie, Winner:""}}).sort((a,b) => new Date(a.DateTime) - new Date(b.DateTime)); 
   
                 setSeries(daySeries);
                 //console.log([...daySeries, ...daySeries.map(s=>s)]);

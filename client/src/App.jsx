@@ -2,15 +2,12 @@ import {useState, useContext, useRef} from "react";
 import {SelectComponent, GameComponent} from "./components"
 import { GameContext } from "./context/GameContext";
 import { FacebookShareButton, FacebookIcon } from 'react-share';
-import { ArrayToString } from "./utils/helper";
-import { IoMdCopy, IoLogoFacebook } from "react-icons/io";
+import { IoMdCopy } from "react-icons/io";
 import { MdOutlineAttachEmail, MdOutlineShare, MdFacebook} from "react-icons/md";
-import { GrSchedule, GrSchedulePlay} from "react-icons/gr";
-import {AiFillSchedule, AiOutlineSchedule} from "react-icons/ai";
+import { AiOutlineSchedule} from "react-icons/ai";
 import Popup from "react-animated-popup"
 import html2canvas from 'html2canvas';
 import moment from "moment";
-
 
 
 const App = () => {
@@ -54,6 +51,8 @@ const App = () => {
   return (  
     <div className="min-h-[70px] sm:px-0 sm:min-w-[120px]" >
         <div className="flex grid grid-rows mt-5">
+        <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+</fb:login-button>
             <div className="flex gradient-bg-welcome rounded-t-lg mx-5 p-2 flex justify-start items-center text-xl 
             text-base font-bold text-white">
                 <img className="w-32" src="./images/fp_120.png"/>
