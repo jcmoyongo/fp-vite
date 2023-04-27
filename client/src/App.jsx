@@ -51,8 +51,6 @@ const App = () => {
   return (  
     <div className="min-h-[70px] sm:px-0 sm:min-w-[120px]" >
         <div className="flex grid grid-rows mt-5">
-        <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-</fb:login-button>
             <div className="flex gradient-bg-welcome rounded-t-lg mx-5 p-2 flex justify-start items-center text-xl 
             text-base font-bold text-white">
                 <img className="w-32" src="./images/fp_120.png"/>

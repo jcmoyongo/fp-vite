@@ -2,6 +2,7 @@ import {useContext} from "react";
 import {GameContext} from "../context/GameContext"
 import stadiums from "./stadiums";
 import teams from '../utils/teams'; 
+import schedule from './games_sd'
 
 export const SeasonType = {
         Regular: 1,
@@ -80,7 +81,9 @@ export const getStatusColor = (status) => {
             case "InProgress":
                 return "text-green-600"
             case "Scheduled":
-                 return "text-blue-600"
+                return "text-blue-600"
+            case "NotNecessary":
+                return "text-orange-600"
             default:
                 return "";
           }
@@ -101,6 +104,8 @@ export const translateStatus = (status) => {
                 return "En Cours"
             case "Scheduled":
                  return "Programmé"
+            case "NotNecessary":
+                return "Pas Nécessaire"
             default:
                 return status;
           }
@@ -133,9 +138,13 @@ export const getSeriesStatus = (game) => {
     if (series.GameNumber === undefined || series.GameNumber === 0) { message = "Série en attente (0 - 0 )"}
     if (series.GameNumber > 0) {
         if (series.HomeTeamWins > series.AwayTeamWins) {
-            message = `Match ${series.GameNumber} (${game.HomeTeam} mène ${series.HomeTeamWins} - ${series.AwayTeamWins})`
+            message = series.HomeTeamWins == 4
+                ? `${game.HomeTeam} a gagné ${series.HomeTeamWins} - ${series.AwayTeamWins}`
+                : `Match ${series.GameNumber} (${game.HomeTeam} mène ${series.HomeTeamWins} - ${series.AwayTeamWins})`;
         } else if (series.HomeTeamWins < series.AwayTeamWins) {
-            message = `Match ${series.GameNumber} (${game.AwayTeam} mène ${series.AwayTeamWins} - ${series.HomeTeamWins})`
+            message = series.AwayTeamWins == 4
+            ? `${game.AwayTeam} a gagné ${series.AwayTeamWins} - ${series.HomeTeamWins}`
+            : `Match ${series.GameNumber} (${game.AwayTeam} mène ${series.AwayTeamWins} - ${series.HomeTeamWins})`
         } else {
             message = `Match ${series.GameNumber} (Série à égalité ${series.HomeTeamWins} - ${series.AwayTeamWins})`
         }
@@ -196,4 +205,9 @@ export const timeAgo = (time) => {
           return token + Math.floor(seconds / format[2]) + ' ' + format[1];
       }
     return time;
+  }
+
+  const lastUpdate = () => {
+    const sched = games_sd.map(s => s);
+     console.log(sched.map( g => {return moment(g.Updated).format('LLLL')}).reverse()[0]);
   }
