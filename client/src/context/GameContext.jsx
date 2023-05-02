@@ -22,7 +22,7 @@ export const GameContextProvider = ({children}) => {
     const [teamList, setTeamList] = useState(teams.map(t => t));
     const [bets, setBets] = useState([]);
     const [series, setSeries] = useState([]); 
-    const [isRefreshed, setIsRefreshed] = useState([]); 
+    const [isRefreshed, setIsRefreshed] = useState(); 
     const [daysBack, setDaysBack] = useState(5)
 
     const handleChange = (e) => {
@@ -42,6 +42,7 @@ export const GameContextProvider = ({children}) => {
     };
 
     const getSchedule = async () => {
+    //Must run after all games are downloaded
         try {
             let uniqueDates = [
                 ...new Map(allGames.map((item) => [item["Day"], item])).values(),
@@ -83,17 +84,22 @@ export const GameContextProvider = ({children}) => {
     }
 
     const downloadAllGames = async () => {
-
+    //Must run before fetching other data
         try {
-            const isNoGames = (allGames.length == 0 || allGames === undefined || allGames === null);
+            let isNoGames = false;
+            try {
+                isNoGames = (allGames.length == 0 || allGames === undefined || allGames === null);
+            } catch {}
+
             let isStaleSchedule = false;
-            let maxDate = new Date();
 
             if (!isNoGames && !isRefreshed) {
-                maxDate = allGames.map( g => {return moment(g.Updated).format('LLLL')}).reverse()[0];
+                const maxDate = allGames.map( g => {return moment(g.Updated).format('LLLL')}).reverse()[0];
                 isStaleSchedule = (new Date() - new Date(maxDate)) / (1000 * 60 * 60 * 24) > 1; //Last time schedule was updated is more than a day?
             }
             setIsRefreshed(true);
+
+            
 
             if ((isNoGames || isStaleSchedule) && !isRefreshed) { 
                 const year = new Date().getFullYear();
@@ -113,12 +119,10 @@ export const GameContextProvider = ({children}) => {
     }
 
     useEffect(() => {
-        downloadAllGames(); 
-        getSchedule();
+        downloadAllGames(); //Must run before
+        getSchedule();//Depends on th
     }, [bets, series, selectedDate]
     );
-
-
 
     return (
         <GameContext.Provider

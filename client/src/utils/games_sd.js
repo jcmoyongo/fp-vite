@@ -1,4 +1,5 @@
-export default [
+export default
+[
   {
     "GameID": 19422,
     "Season": 2023,
