@@ -54,7 +54,7 @@ const App = () => {
             <div className="flex gradient-bg-welcome rounded-t-lg mx-5 p-2 flex justify-start items-center text-xl 
             text-base font-bold text-white">
                 <img className="w-32" src="./images/fp_120.png"/>
-                Franchise Players - Playoff NBA  {new Date().getFullYear()} 
+                Franchise Players - Playoff NBA  {new Date().toLocaleTimeString()} 
             </div>
             <div className="flexitems-center light-green mx-5 ">
                 <div className="flex w-full justify-center items-center">

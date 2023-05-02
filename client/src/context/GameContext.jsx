@@ -5,7 +5,7 @@ import games from '../utils/games'
 import teams from '../utils/teams'; 
 import games_sd from '../utils/games_sd'
 import getScheduleAsync from "../utils/api_calls/";
-import { scheduleAPI, sportsDataIOAPIKey, serieByDateAPI} from "../utils/constants"
+import { scheduleAPI, sportsDataIOAPIKey, serieByDateAPI, dbHostURL, currentSeason} from "../utils/constants"
 import {GetTeamName} from "../utils/helper";
 
 
@@ -18,12 +18,14 @@ export const GameContextProvider = ({children}) => {
     const [selectedDate, setSelectedDate] = useState(null);
     const [dayGames, setDayGames] = useState([]);
     const [isAllBets, setIsAllBets] =  useState(false);
-    const [allGames, setAllGames] = useState(games_sd.map(d => {return {...d, Winner:""}})); //We're adding the Winnder column to the array object.
+    const [allGames, setAllGames] = useState([]);//useState(games_sd.map(d => {return {...d, Winner:""}})); //We're adding the Winnder column to the array object.
     const [teamList, setTeamList] = useState(teams.map(t => t));
     const [bets, setBets] = useState([]);
     const [series, setSeries] = useState([]); 
-    const [isRefreshed, setIsRefreshed] = useState([]); 
-    const [daysBack, setDaysBack] = useState(5)
+    const [isRefreshed, setIsRefreshed] = useState(); 
+    const [daysBack, setDaysBack] = useState(5);
+    const [seasonYear, setSeasonYear] = useState(new Date().getFullYear());
+    const [lastUpdateTime, setlastUpdateTime] = useState(new Date());
 
     const handleChange = (e) => {
         if (e === null) {
@@ -41,7 +43,8 @@ export const GameContextProvider = ({children}) => {
         setBets([]);
     };
 
-    const getSchedule = async () => {
+    const makeSchedule = async () => {
+    //Must run after all games are downloaded
         try {
             let uniqueDates = [
                 ...new Map(allGames.map((item) => [item["Day"], item])).values(),
@@ -50,7 +53,6 @@ export const GameContextProvider = ({children}) => {
             }).filter(date => date.value >=  moment((new Date()).setDate((new Date()).getDate() - daysBack)).format('L') );
             // moment((new Date()).setDate((new Date()).getDate() -X)).format('L') ); to back X days
             setScheduleList(uniqueDates);
-
         } catch(error){
             console.log(error);
         }
@@ -63,11 +65,10 @@ export const GameContextProvider = ({children}) => {
             const day = date.toLocaleString('default', {day: '2-digit'});
           
             return [year, month, day].join('-');
-          }
+        }
         try {
                 //console.log("Fetching series...");
                 const fmtDate = formatDate(new Date(date));
-                const season = "POST";
                 const endpoint =  `${serieByDateAPI}${fmtDate}?key=${sportsDataIOAPIKey}`; 
 
                 const response = await fetch(endpoint);
@@ -83,42 +84,103 @@ export const GameContextProvider = ({children}) => {
     }
 
     const downloadAllGames = async () => {
+    //Must run before fetching other data
+        const utcToLocalDate = (date) => {
+            var dateLocal = new Date(date);
+            var newDate = new Date(dateLocal.getTime() - dateLocal.getTimezoneOffset()*60*1000);
+            return newDate;
+        }
+        const diffInHours = (dt2, dt1) =>
+        {//
+            var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+            diff /= (60 * 60);
+            const hours = Math.floor(diff);
+            return hours;     
+        }
+
+        const getScheduleFromDB = async () => {
+            const response = await fetch(`${dbHostURL}/schedule/${seasonYear}`, { mode: 'cors' });
+            const jsonResponse = await response.json();
+            const data = JSON.parse(jsonResponse[0].games);
+            let lastUpdated = utcToLocalDate(jsonResponse[0].latest_update);
+
+            //console.log(lastUpdated);
+            return { data, lastUpdated };
+        }
+
+        const isStaleSchedule = async (data, lastUpdated) => {
+            try {             
+                const updated = new Date(data.map( g => {return moment(g.Updated)}).reverse()[0]);
+                const day = new Date(data.map( g => {return moment(g.Day)}).reverse()[0]);
+                const easternDateTime = new Date((new Date()).toLocaleString('en-US', { timeZone: 'America/New_York',}))
+
+                const diff = diffInHours(easternDateTime, lastUpdated);
+               
+                const stale = diffInHours(easternDateTime, lastUpdated) >= 1;
+
+                return stale;
+            } catch (error) {
+                console.log(error);
+                return false;
+            }             
+
+        }
+
+        const fetchScheduleFromAPI = async () => {
+            const season = "POST";
+            const endpoint = `${scheduleAPI}${seasonYear}${season}?key=${sportsDataIOAPIKey}`; 
+            const response = await fetch(endpoint, {mode: 'cors'});
+            const data = await response.json();
+            return data.map(d => {return {...d, Winner:""}});
+        }
+
+        const mergeSchedule = async (season, sched, lastUpdateTime) => {
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            
+            //const sched = await fetchAPISchedule();
+            const body = { "season":season, "games": sched, "latest_update": lastUpdateTime};
+    
+            var raw = JSON.stringify(body); 
+        
+            var requestOptions = {
+                method: 'PUT',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow',
+                mode: 'cors'
+              };
+
+            const response = await fetch(`${dbHostURL}/schedule/merge`, requestOptions);
+            const data = await response.text();    
+        }
 
         try {
-            const isNoGames = (allGames.length == 0 || allGames === undefined || allGames === null);
-            let isStaleSchedule = false;
-            let maxDate = new Date();
+            var { data, lastUpdated } = await getScheduleFromDB();
+            const isStale = await isStaleSchedule(data, lastUpdated);
 
-            if (!isNoGames && !isRefreshed) {
-                maxDate = allGames.map( g => {return moment(g.Updated).format('LLLL')}).reverse()[0];
-                isStaleSchedule = (new Date() - new Date(maxDate)) / (1000 * 60 * 60 * 24) > 1; //Last time schedule was updated is more than a day?
-            }
-            setIsRefreshed(true);
-
-            if ((isNoGames || isStaleSchedule) && !isRefreshed) { 
-                const year = new Date().getFullYear();
-                //console.log("Fetching from API...");
-                const season = "POST";
-                const endpoint = `${scheduleAPI}${year}${season}?key=${sportsDataIOAPIKey}`; 
-                const response = await fetch(endpoint);
-                const data = await response.json();
-
-                const gamesWithWinner = data.map(d => {return {...d, Winner:""}});
+            if (isStale) {
+                console.log("Entered fetch...");
+                //Fetch from API, upsert DB, setAllGames
+                const gamesWithWinner = await fetchScheduleFromAPI();
                 setAllGames(gamesWithWinner);
+                await mergeSchedule(seasonYear, gamesWithWinner, lastUpdateTime);
+
                 setIsRefreshed(true);
-            }
+            } else {
+                setAllGames(data);
+            }      
+
         } catch(error){
             console.log(error);
         }
     }
 
     useEffect(() => {
-        downloadAllGames(); 
-        getSchedule();
-    }, [bets, series, selectedDate]
+        downloadAllGames(); //Must run before
+        makeSchedule();//Depends on th
+    }, [JSON.stringify(allGames)]//?!?
     );
-
-
 
     return (
         <GameContext.Provider

@@ -1,5 +1,7 @@
 export const facebookAppID = "1561062554263407";
 export const sportsDataIOAPIKey = "357fa5f8551c41cea6afc56a1345c611";
+export const currentSeason = 2023;
+export const dbHostURL = "http://localhost:3002";
 //ScheduleBasic
 export const scheduleAPI = "https://api.sportsdata.io/v3/nba/scores/json/SchedulesBasic/"
 //https://api.sportsdata.io/v3/nba/scores/json/SchedulesBasic/2023post?key=357fa5f8551c41cea6afc56a1345c611
@@ -12,6 +14,7 @@ export const scoreByDateAPI = "https://api.sportsdata.io/v3/nba/scores/json/Scor
 
 //Series by date https://api.sportsdata.io/v3/nba/scores/json/ScoresBasic/2023-04-16?key=357fa5f8551c41cea6afc56a1345c611 
 export const serieByDateAPI = "https://api.sportsdata.io/v3/nba/scores/json/ScoresBasic/"
+
 //https://sportsdata.io/developers/api-documentation/nba#/endpoint/teams-all
 
 
