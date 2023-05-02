@@ -19,7 +19,7 @@ export const db = mysql.createPool({
     console.log('connected as id ' + db.threadId);
 });*/
 
-db.query('SELECT 1+1 solution from u245209544_fp.schedule', function (error, results, fields) {
+db.query('SELECT 1+1 solution ', function (error, results, fields) {
     if (error) throw error;
     console.log('The solution is: ', results[0].solution);
 });

@@ -21,8 +21,7 @@ export const getSchedule = (request, response)  => {
 
 export const getScheduleBySeason = (request, response)  => {
   const season = parseInt(request.params.season)
-
-  db.query('SELECT * from schedule WHERE season = ?', [season], (error, results) => {
+  db.query('SELECT * FROM schedule WHERE season = ?', [season], (error, results) => {
     if (error) {
       console.log(error.message) 
     }
@@ -72,5 +71,17 @@ export const deleteSchedule = (request, response) => {
     }
     response.status(200).send(`${season} season deleted. ${results.affectedRows} rows.`)
   })
+}
+
+export const upsertSchedule = (request, response) => {
+    const {season, games, latest_update} = request.body
+    const jsonGames = JSON.stringify(games)
+
+    db.query('REPLACE INTO schedule (season, games, latest_update) VALUES (?, ?, ?)', [season, jsonGames, latest_update], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(201).send(`${season} season schedule upserted. Last updated at ${latest_update}.`)
+    })
 }
 
