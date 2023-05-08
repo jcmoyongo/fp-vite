@@ -50,11 +50,11 @@ const App = () => {
 
   return (  
     <div className="min-h-[70px] sm:px-0 sm:min-w-[120px]" >
-        <div className="flex grid grid-rows mt-5">
-            <div className="flex gradient-bg-welcome rounded-t-lg mx-5 p-2 flex justify-start items-center text-xl 
-            text-base font-bold text-white">
+        <div className="grid grid-rows mt-5">
+            <div className="flex gradient-bg-welcome rounded-t-lg mx-5 p-2 justify-start items-center text-xl 
+           font-bold text-white">
                 <img className="w-32" src="./images/fp_120.png"/>
-                Franchise Players - Playoff NBA  {new Date().toLocaleTimeString()} 
+                Franchise Players - Playoff NBA  {new Date().getFullYear()} 
             </div>
             <div className="flexitems-center light-green mx-5 ">
                 <div className="flex w-full justify-center items-center">

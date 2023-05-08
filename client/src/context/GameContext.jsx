@@ -8,7 +8,6 @@ import getScheduleAsync from "../utils/api_calls/";
 import { scheduleAPI, sportsDataIOAPIKey, serieByDateAPI, dbHostURL, currentSeason} from "../utils/constants"
 import {GetTeamName} from "../utils/helper";
 
-
 export const GameContext = React.createContext();
 
 export const GameContextProvider = ({children}) => {
@@ -25,7 +24,7 @@ export const GameContextProvider = ({children}) => {
     const [isRefreshed, setIsRefreshed] = useState(); 
     const [daysBack, setDaysBack] = useState(5);
     const [seasonYear, setSeasonYear] = useState(new Date().getFullYear());
-    const [lastUpdateTime, setlastUpdateTime] = useState(new Date());
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         if (e === null) {
@@ -59,6 +58,7 @@ export const GameContextProvider = ({children}) => {
     }
 
     const downloadSeries = async (date) => {
+        setLoading(true);
         const formatDate = (date) => {
             const year = date.toLocaleString('default', {year: 'numeric'});
             const month = date.toLocaleString('default', {month: '2-digit'});
@@ -80,6 +80,9 @@ export const GameContextProvider = ({children}) => {
                 //console.log([...daySeries, ...daySeries.map(s=>s)]);
         } catch(error){
             console.log(error);
+        }
+        finally {
+            setLoading(false);
         }
     }
 
@@ -156,15 +159,15 @@ export const GameContextProvider = ({children}) => {
         }
 
         try {
-            var { data, lastUpdated } = await getScheduleFromDB();
-            const isStale = await isStaleSchedule(data, lastUpdated);
+            //var { data, lastUpdated } = await getScheduleFromDB();
+            const isStale = true;// await isStaleSchedule(data, lastUpdated);
 
             if (isStale) {
                 console.log("Entered fetch...");
                 //Fetch from API, upsert DB, setAllGames
                 const gamesWithWinner = await fetchScheduleFromAPI();
                 setAllGames(gamesWithWinner);
-                await mergeSchedule(seasonYear, gamesWithWinner, lastUpdateTime);
+                //await mergeSchedule(seasonYear, gamesWithWinner, lastUpdateTime);
 
                 setIsRefreshed(true);
             } else {
@@ -188,7 +191,7 @@ export const GameContextProvider = ({children}) => {
             gameList, setGameList, 
             selectedDate, setSelectedDate, handleChange, formData, 
             dayGames, setDayGames, isAllBets, setIsAllBets, 
-            allGames, teamList, bets, setBets, downloadSeries, series}}
+            allGames, teamList, bets, setBets, downloadSeries, series, loading}}
         >
             {children}
         </GameContext.Provider>
