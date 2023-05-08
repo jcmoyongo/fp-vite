@@ -31,9 +31,23 @@ const getSchedule = (request, response)  => {
         if (error) {
           console.log(error.message) 
         }
-
+        console.log(results)
       })
+
+}
+
+export const getScheduleBySeason = async (season)  =>{
+  let res
+  await db.query('SELECT * FROM u245209544_fp.schedule WHERE season = ?', [season], (error, results) => {
+    if (error) {
+      console.log(error.message) 
+    }
+    res = results
+  })
+  return res
 }
 //getSchedule();
+//const res = await getScheduleBySeason(2023)
+//console.log(res)
 //const results = getSchedule();
 //console.log(results)

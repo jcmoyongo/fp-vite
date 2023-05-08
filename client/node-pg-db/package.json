@@ -1,7 +1,7 @@
 {
-  "name": "pg-db",
+  "name": "mysql-db",
   "version": "1.0.0",
-  "description": "Node JS and Express connection to PostgreSQL",
+  "description": "Node JS and Express connection to MySQL",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

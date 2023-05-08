@@ -1,6 +1,7 @@
 import games_sd from './src/utils/games_sd.js'
 import moment from "moment";
 import { dbHostURL} from "./src/utils/constants.js"
+import { db, getScheduleBySeason } from './node-pg-db/db.js';
 
 const  lastUpdate =  async  () => {
     const sched = games_sd.map(s => s);
@@ -69,4 +70,6 @@ const fetchSchedule = async () => {
 //const sched =  await fetchSchedule()
 //const newSched = { "season":2025, "games": sched }
 //console.log( newSched.season, newSched.games[0]);
-mergeSchedule(2062)
+//mergeSchedule(2062)
+
+getScheduleBySeason(2023)
