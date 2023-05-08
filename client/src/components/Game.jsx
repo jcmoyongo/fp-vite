@@ -6,9 +6,34 @@ import moment from "moment";
 import 'moment/locale/fr';
 import {getStatusColor, getSeriesStatus, getWinnerFontColor, translateStatus, timeAgo} from '../utils/helper'
 
+const LoadingAnimation = () => {
+
+
+    setTimeout(() => {
+
+    }, 5000);
+    return (
+        <div class="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
+            <div class="animate-pulse flex space-x-4">
+                <div class="rounded-full bg-slate-200 h-10 w-10"></div>
+                <div class="flex-1 space-y-6 py-1">
+                <div class="h-2 bg-slate-200 rounded"></div>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-3 gap-4">
+                    <div class="h-2 bg-slate-200 rounded col-span-2"></div>
+                    <div class="h-2 bg-slate-200 rounded col-span-1"></div>
+                    </div>
+                    <div class="h-2 bg-slate-200 rounded"></div>
+                </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
 const Game = ({game}) =>{
     const [winner, setWinner] = useState();
-    const {setGameList, dayGames, setIsAllBets, setBets, series} = useContext(GameContext);
+    const {setGameList, dayGames, setIsAllBets, setBets, series, loading} = useContext(GameContext);
     const [color, setColor] = useState();
     const [seriesStatus, setSeriesStatus] = useState("");
 
@@ -35,6 +60,10 @@ const Game = ({game}) =>{
     }, [game]);
 
     return (
+        (loading)
+        ?
+        <LoadingAnimation />
+        :
         <div className="flex flex-row w-full bg-white odd:bg-gray-50 border p-1 mb-1 hover:shadow-xl">
             <div className="flex flex-row items-center w-full">
                 <div className="flex flex-col w-full">
@@ -90,9 +119,7 @@ const Game = ({game}) =>{
 }
 
 const GameComponent = () => {
-   // const {dayGames, series} = useContext(GameContext);
-    const {series} = useContext(GameContext);
-    //console.log(series);
+    const {series, loading} = useContext(GameContext);
 
     return (   
         (series.length == 0 || series === undefined || series === null)
