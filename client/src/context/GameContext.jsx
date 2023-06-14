@@ -22,7 +22,7 @@ export const GameContextProvider = ({children}) => {
     const [bets, setBets] = useState([]);
     const [series, setSeries] = useState([]); 
     const [isRefreshed, setIsRefreshed] = useState(); 
-    const [daysBack, setDaysBack] = useState(5);
+    const [daysBack, setDaysBack] = useState(60);
     const [seasonYear, setSeasonYear] = useState(new Date().getFullYear());
     const [loading, setLoading] = useState(false);
 
