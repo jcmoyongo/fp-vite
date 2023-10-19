@@ -17,7 +17,7 @@ const SelectComponent = () => {
       );
     
     return (    
-        <div className="flex my-1 w-full">
+        <div className="flex my-1 w-full text-sm">
           <Select
             placeholder="Choisir une date..."
             className="basic-single rounded-l-lg"

@@ -17,7 +17,8 @@ export default
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/0/02/Washington_Wizards_logo.svg",
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000001,
-    "NbaDotComTeamID": 1610612764
+    "NbaDotComTeamID": 1610612764,
+    "HeadCoach": "Wes Unseld Jr."
   },
   {
     "TeamID": 2,
@@ -29,14 +30,15 @@ export default
     "StadiumID": 2,
     "Conference": "Eastern",
     "Division": "Southeast",
-    "PrimaryColor": "1D1160",
-    "SecondaryColor": "00788C",
+    "PrimaryColor": "00788C",
+    "SecondaryColor": "1D1160",
     "TertiaryColor": "A1A1A4",
-    "QuaternaryColor": "7AB2DD",
+    "QuaternaryColor": "FFFFFF",
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/c/c4/Charlotte_Hornets_%282014%29.svg",
-    "WikipediaWordMarkUrl": "",
+    "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000002,
-    "NbaDotComTeamID": 1610612766
+    "NbaDotComTeamID": 1610612766,
+    "HeadCoach": "Steve Clifford"
   },
   {
     "TeamID": 3,
@@ -55,7 +57,8 @@ export default
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/2/24/Atlanta_Hawks_logo.svg",
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000003,
-    "NbaDotComTeamID": 1610612737
+    "NbaDotComTeamID": 1610612737,
+    "HeadCoach": "Quin Snyder"
   },
   {
     "TeamID": 4,
@@ -74,7 +77,8 @@ export default
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/f/fb/Miami_Heat_logo.svg",
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000004,
-    "NbaDotComTeamID": 1610612748
+    "NbaDotComTeamID": 1610612748,
+    "HeadCoach": "Erik Spoelstra"
   },
   {
     "TeamID": 5,
@@ -89,11 +93,12 @@ export default
     "PrimaryColor": "0077C0",
     "SecondaryColor": "000000",
     "TertiaryColor": "C4CED4",
-    "QuaternaryColor": "",
+    "QuaternaryColor": null,
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/1/10/Orlando_Magic_logo.svg",
-    "WikipediaWordMarkUrl": "",
+    "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000005,
-    "NbaDotComTeamID": 1610612753
+    "NbaDotComTeamID": 1610612753,
+    "HeadCoach": "Jamahl Mosley"
   },
   {
     "TeamID": 6,
@@ -105,14 +110,15 @@ export default
     "StadiumID": 6,
     "Conference": "Eastern",
     "Division": "Atlantic",
-    "PrimaryColor": "006BB6",
+    "PrimaryColor": "1D428A",
     "SecondaryColor": "F58426",
-    "TertiaryColor": "BEC0C2",
+    "TertiaryColor": "9EA2A2",
     "QuaternaryColor": "000000",
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/2/25/New_York_Knicks_logo.svg",
-    "WikipediaWordMarkUrl": "",
+    "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000006,
-    "NbaDotComTeamID": 1610612752
+    "NbaDotComTeamID": 1610612752,
+    "HeadCoach": "Tom Thibodeau"
   },
   {
     "TeamID": 7,
@@ -124,14 +130,15 @@ export default
     "StadiumID": 7,
     "Conference": "Eastern",
     "Division": "Atlantic",
-    "PrimaryColor": "006BB6",
-    "SecondaryColor": "ED174C",
-    "TertiaryColor": "002B5C",
-    "QuaternaryColor": "C4CED4",
+    "PrimaryColor": "1D428A",
+    "SecondaryColor": "C8102E",
+    "TertiaryColor": "C4CED4",
+    "QuaternaryColor": "002B5C",
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/0/0e/Philadelphia_76ers_logo.svg",
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000007,
-    "NbaDotComTeamID": 1610612755
+    "NbaDotComTeamID": 1610612755,
+    "HeadCoach": "Nick Nurse"
   },
   {
     "TeamID": 8,
@@ -150,7 +157,8 @@ export default
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/commons/4/44/Brooklyn_Nets_newlogo.svg",
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000008,
-    "NbaDotComTeamID": 1610612751
+    "NbaDotComTeamID": 1610612751,
+    "HeadCoach": "Jacque Vaughn"
   },
   {
     "TeamID": 9,
@@ -163,13 +171,14 @@ export default
     "Conference": "Eastern",
     "Division": "Atlantic",
     "PrimaryColor": "008348",
-    "SecondaryColor": "BB9753",
+    "SecondaryColor": "FFFFFF",
     "TertiaryColor": "000000",
-    "QuaternaryColor": "FFFFFF",
+    "QuaternaryColor": "BB9753",
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/8/8f/Boston_Celtics.svg",
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000009,
-    "NbaDotComTeamID": 1610612738
+    "NbaDotComTeamID": 1610612738,
+    "HeadCoach": "Joe Mazzulla"
   },
   {
     "TeamID": 10,
@@ -183,12 +192,13 @@ export default
     "Division": "Atlantic",
     "PrimaryColor": "CE1141",
     "SecondaryColor": "000000",
-    "TertiaryColor": "A1A1A4",
+    "TertiaryColor": "393A96",
     "QuaternaryColor": "B4975A",
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/3/36/Toronto_Raptors_logo.svg",
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000010,
-    "NbaDotComTeamID": 1610612761
+    "NbaDotComTeamID": 1610612761,
+    "HeadCoach": "Darko Rajakovic"
   },
   {
     "TeamID": 11,
@@ -202,12 +212,13 @@ export default
     "Division": "Central",
     "PrimaryColor": "CE1141",
     "SecondaryColor": "000000",
-    "TertiaryColor": "",
-    "QuaternaryColor": "",
+    "TertiaryColor": "FFFFFF",
+    "QuaternaryColor": null,
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/6/67/Chicago_Bulls_logo.svg",
-    "WikipediaWordMarkUrl": "",
+    "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000011,
-    "NbaDotComTeamID": 1610612741
+    "NbaDotComTeamID": 1610612741,
+    "HeadCoach": "Billy Donovan"
   },
   {
     "TeamID": 12,
@@ -226,7 +237,8 @@ export default
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Cleveland_Cavaliers_logo.svg/1024px-Cleveland_Cavaliers_logo.svg.png",
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000012,
-    "NbaDotComTeamID": 1610612739
+    "NbaDotComTeamID": 1610612739,
+    "HeadCoach": "J.B. Bickerstaff"
   },
   {
     "TeamID": 13,
@@ -241,11 +253,12 @@ export default
     "PrimaryColor": "002D62",
     "SecondaryColor": "FDBB30",
     "TertiaryColor": "BEC0C2",
-    "QuaternaryColor": "",
+    "QuaternaryColor": null,
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/1/1b/Indiana_Pacers.svg",
-    "WikipediaWordMarkUrl": "",
+    "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000013,
-    "NbaDotComTeamID": 1610612754
+    "NbaDotComTeamID": 1610612754,
+    "HeadCoach": "Rick Carlisle"
   },
   {
     "TeamID": 14,
@@ -260,11 +273,12 @@ export default
     "PrimaryColor": "1D428A",
     "SecondaryColor": "C8102E",
     "TertiaryColor": "BEC0C2",
-    "QuaternaryColor": "002D62",
-    "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Pistons_logo17.svg",
+    "QuaternaryColor": "000000",
+    "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Logo_of_the_Detroit_Pistons.svg",
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000014,
-    "NbaDotComTeamID": 1610612765
+    "NbaDotComTeamID": 1610612765,
+    "HeadCoach": "Monty Williams"
   },
   {
     "TeamID": 15,
@@ -281,9 +295,10 @@ export default
     "TertiaryColor": "0077C0",
     "QuaternaryColor": "000000",
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/4/4a/Milwaukee_Bucks_logo.svg",
-    "WikipediaWordMarkUrl": "",
+    "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000015,
-    "NbaDotComTeamID": 1610612749
+    "NbaDotComTeamID": 1610612749,
+    "HeadCoach": "Adrian Griffin"
   },
   {
     "TeamID": 16,
@@ -295,14 +310,15 @@ export default
     "StadiumID": 16,
     "Conference": "Western",
     "Division": "Northwest",
-    "PrimaryColor": "0C2340",
-    "SecondaryColor": "78BE20",
-    "TertiaryColor": "236192",
-    "QuaternaryColor": "9EA2A2",
+    "PrimaryColor": "0C233F",
+    "SecondaryColor": "266092",
+    "TertiaryColor": "79BC43",
+    "QuaternaryColor": "A0A2A3",
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/c/c2/Minnesota_Timberwolves_logo.svg",
-    "WikipediaWordMarkUrl": "",
+    "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000016,
-    "NbaDotComTeamID": 1610612750
+    "NbaDotComTeamID": 1610612750,
+    "HeadCoach": "Chris Finch"
   },
   {
     "TeamID": 17,
@@ -314,14 +330,15 @@ export default
     "StadiumID": 17,
     "Conference": "Western",
     "Division": "Northwest",
-    "PrimaryColor": "000000",
-    "SecondaryColor": "FFF21F",
+    "PrimaryColor": "FFF21F",
+    "SecondaryColor": "000000",
     "TertiaryColor": "E5E7E6",
-    "QuaternaryColor": "31006F",
+    "QuaternaryColor": "FFFFFF",
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/5/52/Utah_Jazz_logo_2022.svg",
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000017,
-    "NbaDotComTeamID": 1610612762
+    "NbaDotComTeamID": 1610612762,
+    "HeadCoach": "Will Hardy"
   },
   {
     "TeamID": 18,
@@ -338,9 +355,10 @@ export default
     "TertiaryColor": "FDBB30",
     "QuaternaryColor": "002D62",
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/5/5d/Oklahoma_City_Thunder.svg",
-    "WikipediaWordMarkUrl": "",
+    "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000018,
-    "NbaDotComTeamID": 1610612760
+    "NbaDotComTeamID": 1610612760,
+    "HeadCoach": "Mark Daigneault"
   },
   {
     "TeamID": 19,
@@ -355,11 +373,12 @@ export default
     "PrimaryColor": "E03A3E",
     "SecondaryColor": "000000",
     "TertiaryColor": "FFFFFF",
-    "QuaternaryColor": "",
+    "QuaternaryColor": null,
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/2/21/Portland_Trail_Blazers_logo.svg",
-    "WikipediaWordMarkUrl": "",
+    "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000019,
-    "NbaDotComTeamID": 1610612757
+    "NbaDotComTeamID": 1610612757,
+    "HeadCoach": "Chauncey Billups"
   },
   {
     "TeamID": 20,
@@ -378,7 +397,8 @@ export default
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/7/76/Denver_Nuggets.svg",
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000020,
-    "NbaDotComTeamID": 1610612743
+    "NbaDotComTeamID": 1610612743,
+    "HeadCoach": "Michael Malone"
   },
   {
     "TeamID": 21,
@@ -397,7 +417,8 @@ export default
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/f/f1/Memphis_Grizzlies.svg",
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000021,
-    "NbaDotComTeamID": 1610612763
+    "NbaDotComTeamID": 1610612763,
+    "HeadCoach": "Taylor Jenkins"
   },
   {
     "TeamID": 22,
@@ -416,7 +437,8 @@ export default
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/2/28/Houston_Rockets.svg",
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000022,
-    "NbaDotComTeamID": 1610612745
+    "NbaDotComTeamID": 1610612745,
+    "HeadCoach": "Ime Udoka"
   },
   {
     "TeamID": 23,
@@ -428,14 +450,15 @@ export default
     "StadiumID": 23,
     "Conference": "Western",
     "Division": "Southwest",
-    "PrimaryColor": "002B5C",
-    "SecondaryColor": "B4975A",
-    "TertiaryColor": "E31837",
-    "QuaternaryColor": "",
+    "PrimaryColor": "0C2340",
+    "SecondaryColor": "CE0E2D",
+    "TertiaryColor": "B9975B",
+    "QuaternaryColor": null,
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/0/0d/New_Orleans_Pelicans_logo.svg",
-    "WikipediaWordMarkUrl": "",
+    "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000023,
-    "NbaDotComTeamID": 1610612740
+    "NbaDotComTeamID": 1610612740,
+    "HeadCoach": "Willie Green"
   },
   {
     "TeamID": 24,
@@ -447,14 +470,15 @@ export default
     "StadiumID": 24,
     "Conference": "Western",
     "Division": "Southwest",
-    "PrimaryColor": "000000",
-    "SecondaryColor": "C4CED4",
-    "TertiaryColor": "",
-    "QuaternaryColor": "",
+    "PrimaryColor": "C4CED4",
+    "SecondaryColor": "000000",
+    "TertiaryColor": null,
+    "QuaternaryColor": null,
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/a/a2/San_Antonio_Spurs.svg",
-    "WikipediaWordMarkUrl": "",
+    "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000024,
-    "NbaDotComTeamID": 1610612759
+    "NbaDotComTeamID": 1610612759,
+    "HeadCoach": "Gregg Popovich"
   },
   {
     "TeamID": 25,
@@ -473,7 +497,8 @@ export default
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/9/97/Dallas_Mavericks_logo.svg",
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000025,
-    "NbaDotComTeamID": 1610612742
+    "NbaDotComTeamID": 1610612742,
+    "HeadCoach": "Jason Kidd"
   },
   {
     "TeamID": 26,
@@ -492,7 +517,8 @@ export default
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/0/01/Golden_State_Warriors_logo.svg",
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000026,
-    "NbaDotComTeamID": 1610612744
+    "NbaDotComTeamID": 1610612744,
+    "HeadCoach": "Steve Kerr"
   },
   {
     "TeamID": 27,
@@ -504,14 +530,15 @@ export default
     "StadiumID": 27,
     "Conference": "Western",
     "Division": "Pacific",
-    "PrimaryColor": "552583",
+    "PrimaryColor": "31006F",
     "SecondaryColor": "FDB927",
     "TertiaryColor": "000000",
     "QuaternaryColor": null,
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Los_Angeles_Lakers_logo.svg",
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000027,
-    "NbaDotComTeamID": 1610612747
+    "NbaDotComTeamID": 1610612747,
+    "HeadCoach": "Darvin Ham"
   },
   {
     "TeamID": 28,
@@ -523,14 +550,15 @@ export default
     "StadiumID": 27,
     "Conference": "Western",
     "Division": "Pacific",
-    "PrimaryColor": "C8102E",
-    "SecondaryColor": "1D428A",
+    "PrimaryColor": "1D428A",
+    "SecondaryColor": "C8102E",
     "TertiaryColor": "000000",
     "QuaternaryColor": "BEC0C2",
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/b/bb/Los_Angeles_Clippers_%282015%29.svg",
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000028,
-    "NbaDotComTeamID": 1610612746
+    "NbaDotComTeamID": 1610612746,
+    "HeadCoach": "Tyronn Lue"
   },
   {
     "TeamID": 29,
@@ -549,7 +577,8 @@ export default
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/d/dc/Phoenix_Suns_logo.svg",
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000029,
-    "NbaDotComTeamID": 1610612756
+    "NbaDotComTeamID": 1610612756,
+    "HeadCoach": "Frank Vogel"
   },
   {
     "TeamID": 30,
@@ -561,14 +590,15 @@ export default
     "StadiumID": 29,
     "Conference": "Western",
     "Division": "Pacific",
-    "PrimaryColor": "5A2B81",
-    "SecondaryColor": "63727A",
-    "TertiaryColor": "000000",
+    "PrimaryColor": "000000",
+    "SecondaryColor": "5A2B81",
+    "TertiaryColor": "707271",
     "QuaternaryColor": null,
     "WikipediaLogoUrl": "https://upload.wikimedia.org/wikipedia/en/c/c7/SacramentoKings.svg",
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000030,
-    "NbaDotComTeamID": 1610612758
+    "NbaDotComTeamID": 1610612758,
+    "HeadCoach": "Mike Brown"
   },
   {
     "TeamID": 31,
@@ -587,7 +617,8 @@ export default
     "WikipediaLogoUrl": null,
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000031,
-    "NbaDotComTeamID": 1610616834
+    "NbaDotComTeamID": 1610616834,
+    "HeadCoach": null
   },
   {
     "TeamID": 32,
@@ -606,6 +637,7 @@ export default
     "WikipediaLogoUrl": null,
     "WikipediaWordMarkUrl": null,
     "GlobalTeamID": 20000032,
-    "NbaDotComTeamID": 1610616834
+    "NbaDotComTeamID": 1610616834,
+    "HeadCoach": null
   }
 ]

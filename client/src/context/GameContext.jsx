@@ -5,7 +5,7 @@ import games from '../utils/games'
 import teams from '../utils/teams'; 
 import games_sd from '../utils/games_sd'
 import getScheduleAsync from "../utils/api_calls/";
-import { scheduleAPI, sportsDataIOAPIKey, serieByDateAPI, dbHostURL, currentSeason} from "../utils/constants"
+import { scheduleAPI, sportsDataIOAPIKey, serieByDateAPI, dbHostURL, currentSeason, seasonType} from "../utils/constants"
 import {GetTeamName} from "../utils/helper";
 
 export const GameContext = React.createContext();
@@ -22,8 +22,8 @@ export const GameContextProvider = ({children}) => {
     const [bets, setBets] = useState([]);
     const [series, setSeries] = useState([]); 
     const [isRefreshed, setIsRefreshed] = useState(); 
-    const [daysBack, setDaysBack] = useState(5);
-    const [seasonYear, setSeasonYear] = useState(new Date().getFullYear());
+    const [daysBack, setDaysBack] = useState(60);
+    const [seasonYear, setSeasonYear] = useState(2024);
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
@@ -93,6 +93,7 @@ export const GameContextProvider = ({children}) => {
             var newDate = new Date(dateLocal.getTime() - dateLocal.getTimezoneOffset()*60*1000);
             return newDate;
         }
+        
         const diffInHours = (dt2, dt1) =>
         {//
             var diff =(dt2.getTime() - dt1.getTime()) / 1000;
@@ -130,8 +131,7 @@ export const GameContextProvider = ({children}) => {
         }
 
         const fetchScheduleFromAPI = async () => {
-            const season = "POST";
-            const endpoint = `${scheduleAPI}${seasonYear}${season}?key=${sportsDataIOAPIKey}`; 
+            const endpoint = `${scheduleAPI}${seasonYear}${seasonType}?key=${sportsDataIOAPIKey}`; 
             const response = await fetch(endpoint, {mode: 'cors'});
             const data = await response.json();
             return data.map(d => {return {...d, Winner:""}});
@@ -163,7 +163,6 @@ export const GameContextProvider = ({children}) => {
             const isStale = true;// await isStaleSchedule(data, lastUpdated);
 
             if (isStale) {
-                console.log("Entered fetch...");
                 //Fetch from API, upsert DB, setAllGames
                 const gamesWithWinner = await fetchScheduleFromAPI();
                 setAllGames(gamesWithWinner);

@@ -54,7 +54,7 @@ export const GetStadiumName = (id) => {
     try {
         return stadiums.map(stadium => stadium).find(s => s.StadiumID === id);
     } catch(error){
-        console.log(error);
+        console.log(`Stadium ID ${id} NOT FOUND ${error}`);
         return "";
     }
 }
@@ -106,6 +106,8 @@ export const translateStatus = (status) => {
                  return "Programmé"
             case "NotNecessary":
                 return "Pas Nécessaire"
+            case "Canceled":
+                return "Annulé"
             default:
                 return status;
           }
@@ -158,20 +160,20 @@ export const timeAgo = (time) => {
       case 'number':
         break;
       case 'string':
-        time = +new Date(time);
+        time = new Date(time);
         break;
       case 'object':
         if (time.constructor === Date) time = time.getTime();
         break;
       default:
-        time = +new Date();
+        time = new Date();
     }
     var time_formats = [
       [60, 'secondes', 1], // 60
       [120, '1 minute', 'Dans 1 minute'], // 60*2
       [3600, 'minutes', 60], // 60*60, 60
       [7200, '1 heure', 'Dans 1 heure'], // 60*60*2
-      [86400, 'heures', 3600], // 60*60*24, 60*60
+      [172799, 'heures', 3600], // 60*60*24, 60*60 --ORIGINAL:   [86400, 'heures', 3600], // 60*60*24, 60*60
       [172800, 'Hier', 'Demain'], // 60*60*24*2
       [604800, 'jours', 86400], // 60*60*24*7, 60*60*24
       [1209600, '1 semaine', 'Prochaine sem'], // 60*60*24*7*4*2
@@ -183,10 +185,9 @@ export const timeAgo = (time) => {
       [5806080000, '1 siècle', '-1 siècle'], // 60*60*24*7*4*12*100*2
       [58060800000, 'siècle', 2903040000] // 60*60*24*7*4*12*100*20, 60*60*24*7*4*12*100
     ];
-    var seconds = (+new Date() - time) / 1000,
+    var seconds = (new Date() - time) / 1000,
       token = '+',
       list_choice = 1;
-  
     if (seconds == 0) {
       return 'Maintenant'
     }
@@ -196,7 +197,8 @@ export const timeAgo = (time) => {
       list_choice = 2;
     }
     var i = 0,
-      format;
+    format; 
+
     while (format = time_formats[i++])
       if (seconds < format[0]) {
         if (typeof format[2] == 'string')
@@ -204,6 +206,7 @@ export const timeAgo = (time) => {
         else
           return token + Math.floor(seconds / format[2]) + ' ' + format[1];
       }
+
     return time;
   }
 
