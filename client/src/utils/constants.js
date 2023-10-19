@@ -1,7 +1,8 @@
 export const facebookAppID = "1561062554263407";
 export const facebookJSSDK = "https://connect.facebook.net/en_US/sdk.js"
 export const sportsDataIOAPIKey = "357fa5f8551c41cea6afc56a1345c611";
-export const currentSeason = 2023;
+export const currentSeason = 2024;
+export const seasonType = "PRE";
 export const dbHostURL = "http://localhost:3002";
 //ScheduleBasic
 export const scheduleAPI = "https://api.sportsdata.io/v3/nba/scores/json/SchedulesBasic/"
@@ -17,30 +18,9 @@ export const scoreByDateAPI = "https://api.sportsdata.io/v3/nba/scores/json/Scor
 export const serieByDateAPI = "https://api.sportsdata.io/v3/nba/scores/json/ScoresBasic/"
 
 //https://sportsdata.io/developers/api-documentation/nba#/endpoint/teams-all
+export const standingsAPI = "https://api.sportsdata.io/v3/nba/scores/json/Standings/"
 
 
 //STATUS = Final, InProgress, Scheduled, F/OT
 //npm run dev -- --https
 //npm i vite-plugin-mkcert -D
-/*
-GraphRequest request = GraphRequest.newGraphPathRequest(
-    accessToken,
-    "/680010455356375",
-    new GraphRequest.Callback() {
-      @Override
-      public void onCompleted(GraphResponse response) {
-        // Insert your code here
-      }
-  });
-  
-  request.executeAsync();
-
-  FB.api(
-    '/680010455356375',
-    'POST',
-    {"message":"Hello World!"},
-    function(response) {
-        // Insert your code here
-    }
-  );
-*/

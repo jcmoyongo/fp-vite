@@ -54,7 +54,7 @@ export const GetStadiumName = (id) => {
     try {
         return stadiums.map(stadium => stadium).find(s => s.StadiumID === id);
     } catch(error){
-        console.log(error);
+        console.log(`Stadium ID ${id} NOT FOUND ${error}`);
         return "";
     }
 }
@@ -106,6 +106,8 @@ export const translateStatus = (status) => {
                  return "Programmé"
             case "NotNecessary":
                 return "Pas Nécessaire"
+            case "Canceled":
+                return "Annulé"
             default:
                 return status;
           }
@@ -186,7 +188,6 @@ export const timeAgo = (time) => {
     var seconds = (new Date() - time) / 1000,
       token = '+',
       list_choice = 1;
-  console.log(seconds);
     if (seconds == 0) {
       return 'Maintenant'
     }

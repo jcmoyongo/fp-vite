@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
 
 * html {
   padding: 0;
@@ -9,22 +10,15 @@
 html {
   height: 100%;
   background: #223;
-  display: inline flex;
-  place-items: center;
+  /* display: inline flex; */
+  /* place-items: center; */
 }
 
 body {
   margin: 0;
-  font-family: "Open Sans", sans-serif;
+  font-family: Roboto Condensed,"TT Norms", "TT Norms-fallback", proxima-nova, "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  font-family: "TT Norms", "TT Norms-fallback", proxima-nova, "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5;
 }
 
 .gradient-bg-welcome {
@@ -142,7 +136,7 @@ body {
   );
 }
 
-.text-gradient2 {
+.text-gradient {
   background: radial-gradient(
     64.18% 64.18% at 71.16% 35.69%,
     #def9fa 0.89%,
@@ -161,13 +155,96 @@ body {
 .bg-blue-gradient {
   background: linear-gradient(
     157.81deg,
-    #def9fa -43.27%,
-    #bef3f5 -21.24%,
+    #fafcfc -43.27%,
+    #aed0d1 -21.24%,
     #9dedf0 12.19%,
     #7de7eb 29.82%,
     #5ce1e6 51.94%,
     #33bbcf 90.29%
   );
+}
+
+/* table {
+  border: 2px solid forestgreen;
+  width: 800px;
+  height: 200px;
+}
+
+th {
+  border-bottom: 1px solid black;
+}
+
+td {
+  text-align: center;
+} */
+
+.bordered {
+  border-collapse: collapse;
+  /* border: 1px solid black; */
+}
+
+.bordered th,
+.bordered td {
+  border: 1px solid #e0e0e0;
+  padding: 2px;
+}
+
+.StatsStandingsTable_teamRank__dbHMs {
+  text-transform: uppercase;
+  font-family: Knockout Wide,sans-serif;
+  font-weight: 400;
+  font-size: 1.125rem;
+  line-height: .8;
+  color: #000;
+  color: var(--text-secondary);
+  width: 1rem;
+}
+
+
+.conf_header {
+    text-align: left;
+    padding: 2px 0;
+    border-bottom: 1px solid #e5e7eb;
+    font-family: Roboto Condensed,Arial,sans-serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    position: sticky;
+    left: 0;
+}
+
+.table_header {
+  position: sticky;
+  left: 0;
+  background-color: #fff;
+  background-color: var(--bg-secondary);
+  color: #000;
+  color: var(--text-secondary);
+  z-index: 5;
+}
+
+.team_rank {
+  text-transform: uppercase;
+  font-family: Knockout Wide,sans-serif;
+  font-weight: 400;
+  font-size: 1.125rem;
+  line-height: .8;
+  color: #000;
+  color: var(--text-secondary);
+  width: 1rem;
+}
+
+.team_stdg_img {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.team_stdg_row {
+  font-family: Roboto Condensed,Arial,sans-serif;
+  /* font-weight: 400; */
+  /* font-size: 1.125rem;
+  line-height: .8;
+  color: #000;
+  color: var(--text-secondary); */
 }
 
 @tailwind base;
