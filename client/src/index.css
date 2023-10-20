@@ -153,7 +153,7 @@ body {
 }
 
 .bg-blue-gradient {
-  background: linear-gradient(
+  /* background: linear-gradient(
     157.81deg,
     #fafcfc -43.27%,
     #aed0d1 -21.24%,
@@ -161,7 +161,9 @@ body {
     #7de7eb 29.82%,
     #5ce1e6 51.94%,
     #33bbcf 90.29%
-  );
+  ); */
+  background: rgb(0,162,199);
+  background: linear-gradient(180deg, rgba(0,162,199,1) 8%, rgba(229,250,255,1) 100%);
 }
 
 /* table {

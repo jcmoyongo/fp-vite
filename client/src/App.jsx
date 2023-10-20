@@ -25,11 +25,11 @@ const App = () => {
     </Popup>
   };
 
-  const handleScreenShot = async () => {
+  const downloadSchedule = async () => {
     const element = printRef.current;
     const canvas = await html2canvas(element);
 
-    const data = canvas.toDataURL('image/png');
+    const data = canvas.toDataURL('image/png', 1);
     const link = document.createElement('a');
 
     const cbData = [new ClipboardItem({[data.type]: data})];
@@ -63,7 +63,9 @@ const App = () => {
                             {selectedDate !== null && (
                                 <button type="button" className="text-white bg-orange-300 hover:bg-[#00a2c7]/90 focus:ring-2 
                                   focus:outline-none focus:ring-[#3b5998]/50 font-medium rounded-md text-sm 
-                                  text-center inline-flex items-center dark:focus:ring-[#3b5998]/55" onClick={handleScreenShot}>
+                                  text-center inline-flex items-center dark:focus:ring-[#3b5998]/55" 
+                                  title="Télécharger le programme"
+                                  onClick={downloadSchedule}>
                                   <MdOutlineShare className="rounded" color="c74a02" size={32} ></MdOutlineShare>
                                   <AiOutlineSchedule className="rounded" color="c74a02" size={32} ></AiOutlineSchedule>
                                   <MdFacebook className="rounded" color="blue" size={32} ></MdFacebook>
@@ -115,13 +117,13 @@ const App = () => {
                   {/* <img className="w-32" src="./images/logo-fp.png"/>
                   <span>Pré-Saison NBA {new Date().getFullYear()+1} </span> */}
                   <h1 className="flex-1 font-poppins font-semibold md:text-[72px] text-[50x] text-white ss:leading-[100.8px] leading-[75px]">
-                  Pré-Saison {" "}
+                  Saison {" "}
                       <span className="text-gradient">NBA {new Date().getFullYear()+1} </span>{" "}
                   </h1>
                 </div>
             </div>
             <div className="grid grid-rows">
-              <div className="flex flex-col items-center dark-green rounded-b-lg p-2 text-white text-xs ">               
+              <div className="flex flex-col items-center bg-blue-gradient rounded-b-lg p-2 text-white text-xs ">               
                     <a href="mailto:admin@franchise-players.com?subject=Depuis Franchise Players">
                       <div className="flex flex-row items-center hover:text-[#e5faff]">                 
                           <p>Nous écrire&nbsp;</p>
