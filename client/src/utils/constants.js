@@ -2,7 +2,7 @@ export const facebookAppID = "1561062554263407";
 export const facebookJSSDK = "https://connect.facebook.net/en_US/sdk.js"
 export const sportsDataIOAPIKey = "357fa5f8551c41cea6afc56a1345c611";
 export const currentSeason = 2024;
-export const seasonType = "PRE";
+export const seasonType = "";
 export const dbHostURL = "http://localhost:3002";
 //ScheduleBasic
 export const scheduleAPI = "https://api.sportsdata.io/v3/nba/scores/json/SchedulesBasic/"
