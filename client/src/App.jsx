@@ -52,9 +52,9 @@ const App = () => {
     <div className="min-h-[210px] sm:px-0 sm:min-w-[360px]" >
         <div className={`${styles.paddingX} ${styles.flexCenter}`}>
           <div className={`${styles.boxWidth}`}>
-            <Profile />
-            <Navbar />    
-            <section id="acceuil"> 
+          <section id="acceuil"> 
+              <Profile />
+              <Navbar />    
               <div className="flex  light-green xl:max-w-[1280px] w-full">
                     <div className="flex w-full justify-center items-center">
                         <div className="">
@@ -111,7 +111,9 @@ const App = () => {
                     </div>  
               </div>       
             </section>
-            <StandingComponent />
+            <section id="classement">
+              <StandingComponent />
+            </section>
             <div className="flex-row gradient-bg-welcome items-center text-xl font-bold text-white">
                 <div className="grid grid-flow-col justify-center items-center">
                   {/* <img className="w-32" src="./images/logo-fp.png"/>
@@ -148,9 +150,8 @@ const App = () => {
                   ))}
                 </div>
               </div>
-            </div>
-            
           </div>
+        </div>
         </div>
     </div>
   )

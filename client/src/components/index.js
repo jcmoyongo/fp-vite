@@ -12,8 +12,8 @@ export const navLinks = [
       title: "Acceuil",
     },
     {
-        id: "paris",
-        title: "Paris",
+        id: "classement",
+        title: "Classement",
       },
     {
       id: "historique",

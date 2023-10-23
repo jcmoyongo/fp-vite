@@ -121,7 +121,7 @@ const GameComponent = () => {
     return (   
         (series.length == 0 || series === undefined || series === null)
         ?<div className="flex justify-center p-5">
-            <img className="w-8 animate-ping" src="./images/basketball.png"/>          
+            <img className="w-8 animate-ping" src="./images/bball-heart.png"/>          
          </div>
         :<div className="md:grid md:grid-cols-3 md:gap-2 flex flex-col justify-center items-center">
             {series.map((g, id) => (
