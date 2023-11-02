@@ -54,6 +54,10 @@ app.listen(port, () => {
   console.log(`App running on port ${port}.`)
 })
 
-//https://thecodebarbarian.com/nodejs-12-imports
-//node --experimental-modules index.js 
-//https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/deployment
+/*
+https://thecodebarbarian.com/nodejs-12-imports
+node --experimental-modules index.js 
+https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/deployment
+https://www.linkedin.com/pulse/how-connect-express-react-comprehensive-guide-eslam-zaid/
+https://dev.to/pixelrena/deploying-your-reactjs-expressjs-server-to-rendercom-4jbo
+*/
