@@ -1,8 +1,7 @@
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import {GameContext} from "../context/GameContext"
 import stadiums from "./stadiums";
-import teams from '../utils/teams'; 
-import schedule from './games_sd'
+import teams from '../utils/teams'
 
 export const SeasonType = {
         Regular: 1,
@@ -23,17 +22,17 @@ export const GameStatus = {
 export const  GetTeamName = (acro, what = 0) => {
     const {teamList} = useContext(GameContext);   
 
-    try {     
-        const team = teamList.find(t=>t.Acronym.toString().startsWith(acro));
-
-        switch(what) {
-            case 0:
-                return team.NickName;
-            case 1:
-                return team.Name;
-            default:
-                return team.NickName;
-          }
+    try {    
+        const team = teams.map(t => t).find(t => t.Key.toString().startsWith(acro));
+        return team.Name;
+        // switch(what) {
+        //     case 0:
+        //         return team.NickName;
+        //     case 1:
+        //         return team.Name;
+        //     default:
+        //         return team.NickName;
+        //   }
     } catch(error){
         console.log(error);
         return "";
@@ -41,9 +40,10 @@ export const  GetTeamName = (acro, what = 0) => {
 }
 
 export const  GetTeamAcronym = (name) => {
+    // const [teamList, setTeamList] = useState(teams.map(t => t));
 
     try {     
-        return name === undefined? "": teams.find(t => t.NickName === name).Acronym
+        return name === undefined? "": teams.map(t => t).find(t => t.Name === name).Key
     } catch(error){
         console.log(error);
         return "";

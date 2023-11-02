@@ -11,7 +11,7 @@ export const RadioButtonComponent = (props) => {
           checked={isSelected}
         />
         <div>&nbsp;</div>
-        <img className="w-8" src={`/images/teams/${value}.png`}/>
+        {value && <img className="w-8" src={`/images/teams/${value}.png`}/>}
         <label className="flex items-center text-sm" htmlFor={id}>&nbsp;{label}</label>
         {/*<input id={id} class= {`peer/${value}`} type="radio" name={name}/>
         <label for={value} class={`peer-checked/${value}:text-sky-500`}> {label}</label>*/}

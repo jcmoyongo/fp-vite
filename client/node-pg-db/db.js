@@ -19,7 +19,7 @@ export const db = mysql.createPool({
     console.log('connected as id ' + db.threadId);
 });*/
 
-db.query('SELECT 1+1 solution ', function (error, results, fields) {
+db.query('SELECT 1+1+5 solution ', function (error, results, fields) {
     if (error) throw error;
     console.log('The solution is: ', results[0].solution);
 });

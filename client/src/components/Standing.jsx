@@ -1,11 +1,13 @@
 import { standingsAPI, currentSeason, seasonType, sportsDataIOAPIKey } from "../utils/constants";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import confStandings from "../utils/standings2";
 import allStandings from "../utils/standings";
 import { MdExpandLess, MdExpandMore } from "react-icons/md";
+import { GameContext } from "../context/GameContext";
 
 const Standing = ({name, toggle, data}) => {
     const [toggleExpansion, setToggleStandings] = useState(toggle);
+    const { dataIOCallStatus } = useContext(GameContext);
 
     return (
         <div className="">
@@ -21,18 +23,19 @@ const Standing = ({name, toggle, data}) => {
                 <div className="table w-full bordered text-xs md:text-sm">
                     <div className="table-header-group">
                         <div className="table-row">
-                            <div className="table-cell text-left border-r border-b pl-2 w-1/3">TEAM</div>
-                            <div className="table-cell text-right border-b">W</div>
-                            <div className="table-cell text-right border-b">L</div>
-                            <div className="table-cell text-right border-b">WIN%</div>
-                            <div className="table-cell text-right border-b">GB</div>
-                            <div className="table-cell text-right border-b">EAST</div>
-                            <div className="table-cell text-right border-b pr-2">WEST</div>
+                            <div className="table-cell text-left border-r border-b pl-2 w-1/3">ÉQUIPE</div>
+                            <div className="table-cell text-right border-b w-1/12">G</div>
+                            <div className="table-cell text-right border-b w-1/12">P</div>
+                            <div className="table-cell text-right border-b w-1/12">%GAGNÉ</div>
+                            <div className="table-cell text-right border-b w-1/12">DERR</div>
+                            <div className="table-cell text-right border-b w-1/12">EST</div>
+                            <div className="table-cell text-right border-b pr-2 w-1/12">OUEST</div>
                         </div>
                     </div> 
                     <div className="table-row-group">
                         {data.map((stdg, i) => (
-                            <div className={`table-row border-b ${(i == 6 || i == 10) && ' border-blue-700'} ${i==6 && 'border-dashed'}`} key={i}>
+                            <div className={`table-row border-b ${(i == 6 || i == 10) && ' border-blue-700'} 
+                                ${i==6 && 'border-dashed'}  hover:bg-green-50`} key={i}>
                                 <div className="table-cell text-left border-r pl-2">
                                     <div className="flex flex-row items-center">
                                         <span className=" font-bold w-6">{stdg.ConferenceRank}</span>
@@ -65,13 +68,12 @@ const Standings = () => {
     const [eastStandings, setEastStandings] =  useState([]);
     const [westStandings, setWestStandings] =  useState([]);
     const [toggleEast, setToggleEast] =  useState(false);
-    const [toggleWest, setToggleWest] =  useState(true);
+    const [toggleWest, setToggleWest] =  useState(false);
 
     const downloaStandings = async () => {
         try {
                 const endpoint =  `${standingsAPI}${seasonType}${currentSeason}?key=${sportsDataIOAPIKey}`; 
-                // console.log(`Standings before sort ${standings}`);
-                
+
                 const response = await fetch(endpoint);
                 const data = await response.json();
     
@@ -110,8 +112,8 @@ const Standings = () => {
 
     return (
         <div className="bg-[#e5faff]">
-            <Standing name="Eastern Conference" toggle={toggleEast} data = {eastStandings} />
-            <Standing name="Western Conference" toggle={toggleWest} data = {westStandings} />
+            <Standing name="Conférence Est" toggle={toggleEast} data = {eastStandings} />
+            <Standing name="Conférence Ouest" toggle={toggleWest} data = {westStandings} />
         </div>
     );
 }
