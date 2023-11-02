@@ -1,8 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import moment from "moment";
 import games from '../utils/games'
-//import schedule from '../utils/schedule'; 
-import teams from '../utils/teams'; 
+import teams from '../utils/teams'
 import games_sd from '../utils/games_sd'
 import getScheduleAsync from "../utils/api_calls/";
 import { scheduleAPI, sportsDataIOAPIKey, serieByDateAPI, dbHostURL, currentSeason, seasonType} from "../utils/constants"
@@ -25,6 +24,7 @@ export const GameContextProvider = ({children}) => {
     const [daysBack, setDaysBack] = useState(60);
     const [seasonYear, setSeasonYear] = useState(2024);
     const [loading, setLoading] = useState(false);
+    const [dataIOCallStatus, setDataIOCallStatus] = useState({statusCode: 200, message: ""});
 
     const handleChange = (e) => {
         if (e === null) {
@@ -75,7 +75,7 @@ export const GameContextProvider = ({children}) => {
                 const data = await response.json();
 
                 const daySeries = data.map(serie => {return {...serie, Winner:""}}).sort((a,b) => new Date(a.DateTime) - new Date(b.DateTime)); 
-  
+
                 setSeries(daySeries);
                 //console.log([...daySeries, ...daySeries.map(s=>s)]);
         } catch(error){
@@ -132,9 +132,15 @@ export const GameContextProvider = ({children}) => {
 
         const fetchScheduleFromAPI = async () => {
             const endpoint = `${scheduleAPI}${seasonYear}${seasonType}?key=${sportsDataIOAPIKey}`; 
-            const response = await fetch(endpoint, {mode: 'cors'});
-            const data = await response.json();
-            return data.map(d => {return {...d, Winner:""}});
+            try {
+                const response = await fetch(endpoint, {mode: 'cors'});
+                const data = await response.json();
+                setDataIOCallStatus({statusCode: data.statusCode, message: data.message});
+                // console.log(dataIOCallStatus);
+                return data.map(d => {return {...d, Winner:""}});
+            } catch(error){
+                // console.log("error");
+            }
         }
 
         const mergeSchedule = async (season, sched, lastUpdateTime) => {
@@ -180,7 +186,7 @@ export const GameContextProvider = ({children}) => {
 
     useEffect(() => {
         downloadAllGames(); //Must run before
-        makeSchedule();//Depends on th
+        makeSchedule();
     }, [JSON.stringify(allGames)]//?!?
     );
 
@@ -190,7 +196,7 @@ export const GameContextProvider = ({children}) => {
             gameList, setGameList, 
             selectedDate, setSelectedDate, handleChange, formData, 
             dayGames, setDayGames, isAllBets, setIsAllBets, 
-            allGames, teamList, bets, setBets, downloadSeries, series, loading}}
+            allGames, teamList, bets, setBets, downloadSeries, series, loading, dataIOCallStatus}}
         >
             {children}
         </GameContext.Provider>

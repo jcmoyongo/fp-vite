@@ -7,7 +7,7 @@ const SelectComponent = () => {
     const [isClearable, setIsClearable] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
      
-    const {scheduleList, handleChange, selectedDate, series} = useContext(GameContext);
+    const {scheduleList, handleChange} = useContext(GameContext);
 
     const Checkbox = ({ children, ...props }) => (
         <label style={{ marginRight: '1em' }}>
@@ -20,7 +20,7 @@ const SelectComponent = () => {
         <div className="flex my-1 w-full text-sm">
           <Select
             placeholder="Choisir une date..."
-            className="basic-single rounded-l-lg"
+            className="basic-single rounded-lg"
             classNamePrefix="select"
             isLoading={isLoading}
             isClearable={isClearable}

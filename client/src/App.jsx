@@ -1,27 +1,59 @@
 import { useState, useContext, useRef } from "react";
-import { SelectComponent, GameComponent, Navbar, socialMedia, StandingComponent } from "./components"
+import { SelectComponent, GameComponent, Navbar, socialMedia, StandingComponent, Profile, Banner } from "./components"
 import { GameContext } from "./context/GameContext";
 import { FacebookShareButton, FacebookIcon } from 'react-share';
 import { IoMdCopy } from "react-icons/io";
 import { MdOutlineAttachEmail, MdOutlineShare, MdFacebook } from "react-icons/md";
 import { AiOutlineSchedule } from "react-icons/ai";
+import { FaRegSmile} from "react-icons/fa";
 import Popup from "react-animated-popup"
 import html2canvas from 'html2canvas';
 import moment from "moment";
 import styles, { layout } from "./style";
-import  Profile from "./components/Profile";
+// import Profile from "./components/Profile";
+import Select from 'react-select';
 
 const App = () => {
-  const {isAllBets, bets, selectedDate} = useContext(GameContext);
+  const {isAllBets, bets, selectedDate, dataIOCallStatus} = useContext(GameContext);
   const [isVisible, setIsVisible] = useState(false);
+  const [separatorOption, setSeparatorOption] = useState(null);
+  const [repetionOption, setRepetionOption] = useState(null);
+  const [avantApres, setAvantApres] = useState(false);
+  const [isClearable, setIsClearable] = useState(true);
+
   const printRef = useRef(null);
-  const MakeHashTag = () => {return bets.join("|") + "\n#Pari" + new Date(selectedDate).toDateString().replace(/\s+/g, "");}
+  const optionsSeparateur = [
+    { value: 'pipe', label: '|    Barre v.' },
+    { value: 'dash', label: '-    Tirait' },
+    { value: 'colon', label: ':   2 pts.' }, 
+    { value: 'space', label: "' ' Espace" }
+  ];
+  const optionsRepeter = [
+    { value: '1', label: '1x' },
+    { value: '2', label: '2x' },
+    { value: '3', label: '3x' }
+  ];
+
+  const MakeHashTag = () => {
+    const separator = separatorOption === null ? "|" : separatorOption.value;
+    const repetition = repetionOption === null ? 1 : repetionOption.value;
+    const reps = Array(repetition).fill(separator);
+    let _bets = bets.join(reps);
+    avantApres && (_bets = reps + _bets + reps);
+
+    console.log(repetition);
+    console.log(reps);
+    console.log(_bets);
+
+    return bets.join(" | ") + "\n" + " \n" + new Date(selectedDate).toLocaleDateString("fr-FR").replace(/\s+/g, "") + 
+    " depuis https://www.franchise-players.com";
+  }
 
   const handleCopy = (e) => {
     const text = MakeHashTag();
     navigator.clipboard.writeText(text);
     <Popup animationDuration={50} visible={isVisible} onClose={() => setIsVisible(false)}>
-      <p>Vos paris ont été copiés!</p>
+      <p>Votre pari a été copié dans le presse-papier!</p>
     </Popup>
   };
 
@@ -48,17 +80,41 @@ const App = () => {
     }
   };
 
+  const handleSeparatorChange = (e) => {
+    if (e === null) {
+      setSeparatorOption(null)
+    }
+    else {
+      console.log
+      setSeparatorOption(e.value)
+    }
+  }
+
+  const handleRepetitionChange = (e) => {
+    if (e === null) {
+      setRepetionOption(null)
+    }
+    else {
+      setRepetionOption(e.value)
+    }
+  }
+
+  const handleAvantApresChange = (e) => {
+    setAvantApres(!e.value)
+  }
+  
   return (  
     <div className="min-h-[210px] sm:px-0 sm:min-w-[360px]" >
         <div className={`${styles.paddingX} ${styles.flexCenter}`}>
           <div className={`${styles.boxWidth}`}>
-          <section id="acceuil"> 
+            <section id="acceuil"> 
               <Profile />
+              {dataIOCallStatus.statusCode == 403 && <Banner message = {dataIOCallStatus.message.split(" ").reverse()[0]} />}
               <Navbar />    
-              <div className="flex  light-green xl:max-w-[1280px] w-full">
+              <div className="flex light-green xl:max-w-[1280px] w-full">
                     <div className="flex w-full justify-center items-center">
-                        <div className="">
-                          <div className="flex flex-row items-center my-1 w-ful">
+                        <div className=" ">
+                          <div className="flex flex-row items-center my-1 w-full">
                             <SelectComponent />
                             {selectedDate !== null && (
                                 <button type="button" className="text-white bg-orange-300 hover:bg-[#00a2c7]/90 focus:ring-2 
@@ -74,37 +130,82 @@ const App = () => {
                           </div>   
                           <GameComponent />
                           {isAllBets && (
-                            <div  className="border-2 border-orange-600 my-1 light-green border:animate-pulse"> 
-                                <div className="text-xs text-white m-1 dark-green ">{
-                                  bets.length > 0 
-                                  ? <p className="animate-pulse">Partagez vos paris. Bonne chance! &#128512;</p> 
-                                  : <p className="animate-pulse">Désolé, les paris sont fermés!&#129488;</p>}
+                            <div  className="border rounded border-orange-600 my-1 md:mx-1 light-green border:animate-pulse"> 
+                                <div className="text-xs text-white m-1 dark-green">
+                                  <div className="flex my-1 w-full text-sm p-1 font">
+                                      <Select
+                                        className="flex basic-single rounded-lg text-black text-xs mr-1"
+                                        placeholder="Séparateur..."
+                                        classNamePrefix="select"
+                                        defaultValue={{ value: 'pipe', label: '|    Barre v.' }}
+                                        isClearable={isClearable}
+                                        onChange={handleSeparatorChange}
+                                        options={ optionsSeparateur }
+                                        theme={(theme) => ({
+                                            ...theme,
+                                            borderRadius: 5,
+                                            colors: {
+                                              ...theme.colors,
+                                              primary25: '#e5faff',
+                                              primary: '#00a2c7',
+                                            },
+                                          })}
+                                        /> 
+                                      <Select
+                                        className="flex basic-single rounded-lg text-black text-xs mr-1"
+                                        placeholder="Répéter..."
+                                       classNamePrefix="select"
+                                        defaultValue= {{ value: '1', label: '1x' }}
+                                        isClearable={isClearable}
+                                        onChange={handleRepetitionChange}
+                                        options={ optionsRepeter }
+                                        theme={(theme) => ({
+                                            ...theme,
+                                            borderRadius: 5,
+                                            colors: {
+                                              ...theme.colors,
+                                              primary25: '#e5faff',
+                                              primary: '#00a2c7',
+                                            },
+                                          })}
+                                        /> 
+                                      <div className="flex justify-center items-start md:items-center text-xs flex-col md:flex-row ">
+                                        <input className="" type="checkbox" onChange={handleAvantApresChange}  />
+                                        <label >Sép. avant et après</label>
+                                      </div>
+                                </div>
                                 </div>
                                 {bets.length > 0 && (
-                                <div className="flex w-full items-center p-2">
-                                    <div>
-                                        <FacebookShareButton className="items-center flex" title="Atteindre le groupe Franchise Players"
-                                          url=""
-                                          quote={"My quote"}
-                                          hashtag={MakeHashTag()}
-                                          >
-                                            <FacebookIcon size={32} round onClick={() =>  navigator.clipboard.writeText(bets.join("|"))}/>
-                                          </FacebookShareButton>
-                                     </div>
-                                    <IoMdCopy className="hover:bg-orange-400 rounded" size={32} alt="Copy" 
-                                       title="Copier dans le presse-papier" onClick={() => handleCopy()}></IoMdCopy>                             
-                                    <a href="https://www.facebook.com/groups/680010455356375" target="_blank">
-                                      <div>
-                                        <img className="w-8 border bg-orange-200 hover:bg-orange-400 rounded" src="/images/logo-fp.png"/>
-                                      </div>
-                                    </a>
-                                    <div className="flex-1 flex flex-row flex-wrap justify-end items-center gap-1 m-1">
-                                          {bets.map((b, id) => ( 
-                                              <div className="border rounded p-1 dark-green text-white"  key={id}> {b} </div>
-                                          ))}   
-                                    </div>         
-                                </div>   
-                      ) }                      
+                                  <div className="flex w-full items-center p-2">
+                                      {/* <div>
+                                          <FacebookShareButton className="items-center flex" title="Atteindre le groupe Franchise Players"
+                                            url=""
+                                            quote={"My quote"}
+                                            hashtag={MakeHashTag()}
+                                            >
+                                              <FacebookIcon size={32} round onClick={() =>  navigator.clipboard.writeText(bets.join("|"))}/>
+                                            </FacebookShareButton>
+                                       </div> */}
+                                      <IoMdCopy className=" hover:bg-[#00a2c7]/90   bg-orange-300 rounded text-orange-600" size={32} alt="Copy" 
+                                        title="Copier dans le presse-papier" onClick={() => handleCopy()}></IoMdCopy>                             
+                                      <a href="https://www.facebook.com/groups/680010455356375" target="_blank" title="Partager dans le groupe Franchise Players">
+                                        <div className="flex">
+                                          <MdOutlineShare className="rounded  hover:bg-[#00a2c7]/90  bg-orange-300 text-orange-600 ml-1"  size={32} ></MdOutlineShare>
+                                          {/* <img className="w-8 border bg-orange-200 hover:bg-orange-400 rounded -mx-2" src="/images/logo-fp.png"/> */}
+                                        </div>
+                                      </a>
+                                      <div className="flex-1 flex flex-row flex-wrap justify-end items-center gap-1 m-1">
+                                            {bets.map((b, id) => ( 
+                                                <div className="border rounded p-1 dark-green text-white"  key={id}> {b} </div>
+                                            ))}   
+                                      </div>         
+                                  </div>   
+                                )}    
+                                <div className="text-xs text-white m-1 dark-green ">{
+                                  bets.length > 0 
+                                    ? <p className="animate-pulse">Partagez vos paris. Bonne chance! &#128512;</p> 
+                                    : <p className="animate-pulse">Désolé, les paris sont fermés!&#129488;</p>}
+                                </div>                  
                             </div> 
                             )}
                         </div>

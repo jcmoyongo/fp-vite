@@ -3,6 +3,7 @@ import { LoginSocialFacebook } from "reactjs-social-login";
 import { FacebookLoginButton } from "react-social-login-buttons";
 import {BiLogIn, BiLogOut} from "react-icons/bi";
 import {FaSquareFacebook} from "react-icons/fa6";
+import {CgProfile} from "react-icons/cg";
 import { useState, useCallback, useEffect } from "react";
  
 const Profile = () => {
@@ -12,13 +13,6 @@ const Profile = () => {
   
     useEffect(() => {
       const loggedInUser = localStorage.getItem("user");
-      //console.log(`Entering useEffect ${loggedInUser}`);
-    //   if (loggedInUser) {
-    //     console.log(`Entered useEffect ${profile}`);
-    //     const foundUser =  JSON.parse(loggedInUser);
-    //     setProfile(foundUser);
-    //     console.log(`Set profile ${profile}`);
-    //   }
     }, []);
 
     const onLoginStart = useCallback(() => {
@@ -31,6 +25,7 @@ const Profile = () => {
             const foundUser =  JSON.parse(loggedInUser);
             setProfile(foundUser);
         }
+        console.log(profile);
     }, []);
 
     const onLogoutSuccess = useCallback(() => {
@@ -92,7 +87,7 @@ const Profile = () => {
                     <FacebookLoginButton size="32px" className="justify-end" onClick={handleLogin} title="Se connecter pour pouvoir envoyer les paris par e-mail." >
                         {/* <BiLogIn></BiLogIn> */}
                         <div className="flex flex-row">
-                            {loggingIn &&     <svg class="animate-spin h-3 w-3 mr-3 bg-[#e5faff]" viewBox="0 0 16 16"></svg>}                   
+                            {loggingIn &&     <svg className="animate-spin h-3 w-3 mr-3 bg-[#e5faff]" viewBox="0 0 16 16"></svg>}                   
                             <h1 className="text-xs text-[#e5faff]">{!loggingIn?"Se connecter":"Connection en cours..."}</h1>
                         </div>
                     </FacebookLoginButton>
@@ -102,7 +97,7 @@ const Profile = () => {
             {profile && (
                 <div className="flex items-center mb-1" onClick={onProfileClick}>
                     <h1 className="text-xs text-[#e5faff]">{profile.name}</h1>
-                    <img className="ml-1 rounded-full border-2 h-8 border-[#e5faff]" src={profile.picture.data.url} />
+                    <img className="ml-1 rounded-full border-2 h-8 border-[#e5faff] text-white" alt="Photo" src={profile.picture.data.url} />
                 </div>
             )}
 

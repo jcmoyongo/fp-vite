@@ -20,6 +20,8 @@ export const serieByDateAPI = "https://api.sportsdata.io/v3/nba/scores/json/Scor
 //https://sportsdata.io/developers/api-documentation/nba#/endpoint/teams-all
 export const standingsAPI = "https://api.sportsdata.io/v3/nba/scores/json/Standings/"
 
+//https://api.sportsdata.io/v3/nba/scores/json/CurrentSeason?key=357fa5f8551c41cea6afc56a1345c611
+
 
 //STATUS = Final, InProgress, Scheduled, F/OT
 //npm run dev -- --https
