@@ -40,6 +40,3 @@ export const testAPI = () => {                      // Testing Graph API after l
     document.getElementById('status').innerHTML =
       'Thanks for logging in, ' + response.name + '!';
   });
-}
-
-  
