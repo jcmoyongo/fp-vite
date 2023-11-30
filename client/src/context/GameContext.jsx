@@ -21,10 +21,11 @@ export const GameContextProvider = ({children}) => {
     const [bets, setBets] = useState([]);
     const [series, setSeries] = useState([]); 
     const [isRefreshed, setIsRefreshed] = useState(); 
-    const [daysBack, setDaysBack] = useState(60);
+    const [daysBack, setDaysBack] = useState(3);
     const [seasonYear, setSeasonYear] = useState(2024);
     const [loading, setLoading] = useState(false);
     const [dataIOCallStatus, setDataIOCallStatus] = useState({statusCode: 200, message: ""});
+    const [userProfile, setUserProfile] = useState(null);
 
     const handleChange = (e) => {
         if (e === null) {
@@ -74,10 +75,18 @@ export const GameContextProvider = ({children}) => {
                 const response = await fetch(endpoint);
                 const data = await response.json();
 
-                const daySeries = data.map(serie => {return {...serie, Winner:""}}).sort((a,b) => new Date(a.DateTime) - new Date(b.DateTime)); 
+                const dayGames = allGames.map(serie => {return {...serie, Winner:""}}).filter(g => moment(g.Day).format('L') === date);
+                const firstGame = dayGames[0];
+                const now = (new Date()).getTime();
 
-                setSeries(daySeries);
-                //console.log([...daySeries, ...daySeries.map(s=>s)]);
+                if (now < (new Date(firstGame.DateTime)).getTime()) {
+                    // console.log("Future games");
+                    setSeries(dayGames);
+                } else {
+                    // console.log("Active/Past games");
+                    const daySeries = data.map(serie => {return {...serie, Winner:""}}).sort((a,b) => new Date(a.DateTime) - new Date(b.DateTime)); 
+                    setSeries(daySeries);
+                }
         } catch(error){
             console.log(error);
         }
@@ -132,11 +141,12 @@ export const GameContextProvider = ({children}) => {
 
         const fetchScheduleFromAPI = async () => {
             const endpoint = `${scheduleAPI}${seasonYear}${seasonType}?key=${sportsDataIOAPIKey}`; 
+            // console.log(endpoint);
             try {
                 const response = await fetch(endpoint, {mode: 'cors'});
                 const data = await response.json();
                 setDataIOCallStatus({statusCode: data.statusCode, message: data.message});
-                // console.log(dataIOCallStatus);
+
                 return data.map(d => {return {...d, Winner:""}});
             } catch(error){
                 // console.log("error");
@@ -170,7 +180,7 @@ export const GameContextProvider = ({children}) => {
 
             if (isStale) {
                 //Fetch from API, upsert DB, setAllGames
-                const gamesWithWinner = await fetchScheduleFromAPI();
+                const gamesWithWinner =  await fetchScheduleFromAPI();
                 setAllGames(gamesWithWinner);
                 //await mergeSchedule(seasonYear, gamesWithWinner, lastUpdateTime);
 
@@ -196,7 +206,8 @@ export const GameContextProvider = ({children}) => {
             gameList, setGameList, 
             selectedDate, setSelectedDate, handleChange, formData, 
             dayGames, setDayGames, isAllBets, setIsAllBets, 
-            allGames, teamList, bets, setBets, downloadSeries, series, loading, dataIOCallStatus}}
+            allGames, teamList, bets, setBets, downloadSeries, series, loading, dataIOCallStatus,
+            userProfile, setUserProfile}}
         >
             {children}
         </GameContext.Provider>

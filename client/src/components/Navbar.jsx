@@ -8,7 +8,7 @@ const Navbar = () => {
   return (
     <nav className={`w-full flex items-center  border-t-2 border-[#00a2c7]`}>
       <div className="flex flex-row items-center ">
-          <img className="w-48 my-2" src="./images/logo-franchiseplayers.png"/>
+          <img className="w-48 my-2" src="./images/fp-banner.png"/>
       </div>
       <ul className="list-none sm:flex hidden justify-end  flex-1 ml-20">
         {navLinks.map((nav, index) => (
