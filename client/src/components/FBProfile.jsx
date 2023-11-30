@@ -4,11 +4,10 @@ import { FacebookLoginButton } from "react-social-login-buttons";
 import {BiLogIn, BiLogOut} from "react-icons/bi";
 import {FaSquareFacebook} from "react-icons/fa6";
 import {CgProfile} from "react-icons/cg";
-import { useState, useCallback, useEffect, useContext } from "react";
-import { GameContext } from "../context/GameContext";
+import { useState, useCallback, useEffect } from "react";
  
-const Profile = () => {
-    const {userProfile, setUserProfile} = useContext(GameContext);
+const FBProfile = () => {
+    const [FBProfile, setProfile] = useState(null);
     const [toggle, setToggle] = useState(false);
     const [loggingIn, setLoggingIn] = useState(false);
   
@@ -17,22 +16,22 @@ const Profile = () => {
     }, []);
 
     const onLoginStart = useCallback(() => {
-        // console.log(`onLoginStart... ${profile}`);
+        // console.log(`onLoginStart... ${FBProfile}`);
         //alert('login start');
         setLoggingIn(true);
         const loggedInUser = localStorage.getItem("user");
         if (!loggedInUser) {
-            // console.log("Setting Profile...");
+            // console.log("Setting FBProfile...");
             const foundUser =  JSON.parse(loggedInUser);
-            setUserProfile(foundUser);
+            setProfile(foundUser);
         }
-        console.log(userProfile);
+        console.log(FBProfile);
     }, []);
 
     const onLogoutSuccess = useCallback(() => {
 
         setToggle(!toggle);
-        setUserProfile();
+        setProfile();
         localStorage.clear();
         // console.log("onLogoutSuccess...");
         //alert('logout success');
@@ -41,20 +40,20 @@ const Profile = () => {
 
     const onLogout = useCallback(() => {
         setToggle(false);
-        setUserProfile();
+        setProfile();
         localStorage.clear();
         // console.log(`onLogout...${toggle}`);
     }, []);
 
     const handleLogin = () => {
         // console.log(`handleLogin... ${localStorage.getItem("user")}`);
-        // console.log(`handleLogin... ${profile}`);
+        // console.log(`handleLogin... ${FBProfile}`);
     }
 
     const onProfileClick = () => {
       setToggle(!toggle);
       setLoggingIn(false);
-    //   console.log("`Clicked profile picture...Toggle:${toggle}`");
+    //   console.log("`Clicked FBProfile picture...Toggle:${toggle}`");
     }
 
     return (
@@ -71,13 +70,13 @@ const Profile = () => {
                     </ul>
                 </div>
             </div>
-            {!userProfile && (
+            {!FBProfile && (
                 <LoginSocialFacebook className="sm:-mx-0 -mx-1"
                     appId="1202990393661179" 
                     onLoginStart={onLoginStart}
                     onLogoutSuccess={onLogoutSuccess} 
                     onResolve={(response) => {
-                        setUserProfile(response.data);
+                        setProfile(response.data);
                         localStorage.setItem("user", JSON.stringify(response.data));
                     }}
                     onReject={(error) => {
@@ -87,7 +86,7 @@ const Profile = () => {
 
                     <FacebookLoginButton size="32px" className="justify-end" onClick={handleLogin} title="Se connecter pour pouvoir envoyer les paris par e-mail." >
                         {/* <BiLogIn></BiLogIn> */}
-                        <div className="flex flex-row"   title="Se connecter pour pouvoir envoyer les paris par courriel.">
+                        <div className="flex flex-row">
                             {loggingIn &&     <svg className="animate-spin h-3 w-3 mr-3 bg-[#e5faff]" viewBox="0 0 16 16"></svg>}                   
                             <h1 className="text-xs text-[#e5faff]">{!loggingIn?"Se connecter":"Connection en cours..."}</h1>
                         </div>
@@ -95,10 +94,10 @@ const Profile = () => {
                 </LoginSocialFacebook>
                 ) 
             }             
-            {userProfile && (
+            {FBProfile && (
                 <div className="flex items-center mb-1" onClick={onProfileClick}>
-                    <h1 className="text-xs text-[#e5faff]">{userProfile.name}</h1>
-                    <img className="ml-1 rounded-full border-2 h-8 border-[#e5faff] text-white" alt="Photo" src={userProfile.picture.data.url} />
+                    <h1 className="text-xs text-[#e5faff]">{FBProfile.name}</h1>
+                    <img className="ml-1 rounded-full border-2 h-8 border-[#e5faff] text-white" alt="Photo" src={FBProfile.picture.data.url} />
                 </div>
             )}
 
@@ -106,4 +105,4 @@ const Profile = () => {
     );
 }
 
-export default Profile;
+export default FBProfile;

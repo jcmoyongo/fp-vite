@@ -34,11 +34,11 @@ const Standing = ({name, toggle, data}) => {
                     </div> 
                     <div className="table-row-group">
                         {data.map((stdg, i) => (
-                            <div className={`table-row border-b ${(i == 6 || i == 10) && ' border-blue-700'} 
-                                ${i==6 && 'border-dashed'}  hover:bg-green-50`} key={i}>
+                            <div className={`table-row border-b ${(i == 5 || i == 9) && ' border-blue-700'} 
+                                ${i==5 && 'border-dashed'}  hover:bg-green-50`} key={i}>
                                 <div className="table-cell text-left border-r pl-2">
                                     <div className="flex flex-row items-center">
-                                        <span className=" font-bold w-6">{stdg.ConferenceRank}</span>
+                                        <span className=" font-bold w-6">{i+1}</span>
                                         <div>
                                             <div >
                                                 <img className="team_stdg_img p-1" src={`/images/teams/${stdg.Name}.png`} title=" Logo" alt=" Logo" loading="lazy" />
@@ -79,15 +79,14 @@ const Standings = () => {
     
                 const eStandings = data
                         .map(s => s)
-                        .sort((a,b) => a.ConferenceRank - b.ConferenceRank)
+                        .sort((a,b) => b.Percentage - a.Percentage )
                         .filter(s => s.Conference == "Eastern");
                 setEastStandings(eStandings);
 
                 const wStandings = data
-                .map(s => s)
-                .sort((a,b) => a.ConferenceRank - b.ConferenceRank)
-                .filter(s => s.Conference == "Western");
-                setEastStandings(eStandings);
+                        .map(s => s)
+                        .sort((a,b) =>  b.Percentage - a.Percentage)
+                        .filter(s => s.Conference == "Western");
                 setWestStandings(wStandings);
 
         } catch(error){

@@ -3,18 +3,16 @@ import { SelectComponent, GameComponent, Navbar, socialMedia, StandingComponent,
 import { GameContext } from "./context/GameContext";
 import { FacebookShareButton, FacebookIcon } from 'react-share';
 import { IoMdCopy } from "react-icons/io";
-import { MdOutlineAttachEmail, MdOutlineShare, MdFacebook } from "react-icons/md";
+import { MdOutlineAttachEmail, MdOutlineShare, MdFacebook, MdEmail } from "react-icons/md";
 import { AiOutlineSchedule } from "react-icons/ai";
-import { FaRegSmile} from "react-icons/fa";
 import Popup from "react-animated-popup"
 import html2canvas from 'html2canvas';
 import moment from "moment";
 import styles, { layout } from "./style";
-// import Profile from "./components/Profile";
-import Select from 'react-select';
+import { fpEmail } from "./utils/constants";
 
 const App = () => {
-  const {isAllBets, bets, selectedDate, dataIOCallStatus} = useContext(GameContext);
+  const {isAllBets, bets, selectedDate, dataIOCallStatus, userProfile} = useContext(GameContext);
   const [isVisible, setIsVisible] = useState(false);
   const [separatorOption, setSeparatorOption] = useState(null);
   const [repetionOption, setRepetionOption] = useState(null);
@@ -34,23 +32,29 @@ const App = () => {
     { value: '3', label: '3x' }
   ];
 
-  const MakeHashTag = () => {
+  const BuildBet = () => {
     const separator = separatorOption === null ? "|" : separatorOption.value;
     const repetition = repetionOption === null ? 1 : repetionOption.value;
     const reps = Array(repetition).fill(separator);
     let _bets = bets.join(reps);
     avantApres && (_bets = reps + _bets + reps);
 
-    console.log(repetition);
-    console.log(reps);
-    console.log(_bets);
-
     return bets.join(" | ") + "\n" + " \n" + new Date(selectedDate).toLocaleDateString("fr-FR").replace(/\s+/g, "") + 
     " depuis https://www.franchise-players.com";
   }
 
+  const FrenchDate = () => new Date(selectedDate).toLocaleDateString("fr-FR").replace(/\s+/g, "");
+
   const handleCopy = (e) => {
-    const text = MakeHashTag();
+    const text = BuildBet();
+    navigator.clipboard.writeText(text);
+    <Popup animationDuration={50} visible={isVisible} onClose={() => setIsVisible(false)}>
+      <p>Votre pari a été copié dans le presse-papier!</p>
+    </Popup>
+  };
+
+  const handleEmail = (e) => {
+    const text = BuildBet();
     navigator.clipboard.writeText(text);
     <Popup animationDuration={50} visible={isVisible} onClose={() => setIsVisible(false)}>
       <p>Votre pari a été copié dans le presse-papier!</p>
@@ -85,7 +89,7 @@ const App = () => {
       setSeparatorOption(null)
     }
     else {
-      console.log
+      //console.log
       setSeparatorOption(e.value)
     }
   }
@@ -108,8 +112,8 @@ const App = () => {
         <div className={`${styles.paddingX} ${styles.flexCenter}`}>
           <div className={`${styles.boxWidth}`}>
             <section id="acceuil"> 
+              {dataIOCallStatus.statusCode == 403 && <Banner  message = {dataIOCallStatus.message.split(" ").reverse()[0]} />}
               <Profile />
-              {dataIOCallStatus.statusCode == 403 && <Banner message = {dataIOCallStatus.message.split(" ").reverse()[0]} />}
               <Navbar />    
               <div className="flex light-green xl:max-w-[1280px] w-full">
                     <div className="flex w-full justify-center items-center">
@@ -132,48 +136,7 @@ const App = () => {
                           {isAllBets && (
                             <div  className="border rounded border-orange-600 my-1 md:mx-1 light-green border:animate-pulse"> 
                                 <div className="text-xs text-white m-1 dark-green">
-                                  <div className="flex my-1 w-full text-sm p-1 font">
-                                      <Select
-                                        className="flex basic-single rounded-lg text-black text-xs mr-1"
-                                        placeholder="Séparateur..."
-                                        classNamePrefix="select"
-                                        defaultValue={{ value: 'pipe', label: '|    Barre v.' }}
-                                        isClearable={isClearable}
-                                        onChange={handleSeparatorChange}
-                                        options={ optionsSeparateur }
-                                        theme={(theme) => ({
-                                            ...theme,
-                                            borderRadius: 5,
-                                            colors: {
-                                              ...theme.colors,
-                                              primary25: '#e5faff',
-                                              primary: '#00a2c7',
-                                            },
-                                          })}
-                                        /> 
-                                      <Select
-                                        className="flex basic-single rounded-lg text-black text-xs mr-1"
-                                        placeholder="Répéter..."
-                                       classNamePrefix="select"
-                                        defaultValue= {{ value: '1', label: '1x' }}
-                                        isClearable={isClearable}
-                                        onChange={handleRepetitionChange}
-                                        options={ optionsRepeter }
-                                        theme={(theme) => ({
-                                            ...theme,
-                                            borderRadius: 5,
-                                            colors: {
-                                              ...theme.colors,
-                                              primary25: '#e5faff',
-                                              primary: '#00a2c7',
-                                            },
-                                          })}
-                                        /> 
-                                      <div className="flex justify-center items-start md:items-center text-xs flex-col md:flex-row ">
-                                        <input className="" type="checkbox" onChange={handleAvantApresChange}  />
-                                        <label >Sép. avant et après</label>
-                                      </div>
-                                </div>
+
                                 </div>
                                 {bets.length > 0 && (
                                   <div className="flex w-full items-center p-2">
@@ -194,6 +157,13 @@ const App = () => {
                                           {/* <img className="w-8 border bg-orange-200 hover:bg-orange-400 rounded -mx-2" src="/images/logo-fp.png"/> */}
                                         </div>
                                       </a>
+                                      {/* {userProfile && ( */}
+                                      {true && (
+                                        <a href={`mailto:${fpEmail}?subject=${userProfile? userProfile.name:""} Pari du ${FrenchDate()}&body=${BuildBet()}`} >
+                                            <MdEmail className=" hover:bg-[#00a2c7]/90 bg-orange-300 rounded text-orange-600 ml-1" size={32} alt="Copy" 
+                                                title="Envoyer vos paris a l'administrateur par email" onClick={() => handleEmail()} />  
+                                        </a>
+                                      )}
                                       <div className="flex-1 flex flex-row flex-wrap justify-end items-center gap-1 m-1">
                                             {bets.map((b, id) => ( 
                                                 <div className="border rounded p-1 dark-green text-white"  key={id}> {b} </div>
@@ -227,7 +197,7 @@ const App = () => {
             </div>
             <div className="grid grid-rows">
               <div className="flex flex-col items-center bg-blue-gradient rounded-b-lg p-2 text-white text-xs ">               
-                    <a href="mailto:admin@franchise-players.com?subject=Depuis Franchise Players">
+                    <a href={`mailto:${fpEmail}?subject=Depuis Franchise Players`}>
                       <div className="flex flex-row items-center hover:text-[#e5faff]">                 
                           <p>Nous écrire&nbsp;</p>
                           <MdOutlineAttachEmail />

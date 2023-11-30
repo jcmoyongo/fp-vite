@@ -34,7 +34,7 @@ const Banner = ({message}) =>{
           <svg viewBox="0 0 2 2" className="mx-2 inline h-0.5 w-0.5 fill-current" aria-hidden="true">
             <circle cx={1} cy={1} r={1} />
           </svg>
-          Hors quota de volume d'appels. Le quota sera reconstitué en {message}&nbsp;        </a>
+          Hors quota de volume d'appels. Le quota sera reconstitué dans {message}&nbsp;        </a>
       </p>
       <div className="flex flex-1 ">
         <button type="button" className="-m-3 p-3 focus-visible:outline-offset-[-4px]">
