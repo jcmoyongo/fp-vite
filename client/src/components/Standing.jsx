@@ -1,6 +1,5 @@
 import { standingsAPI, currentSeason, seasonType, sportsDataIOAPIKey } from "../utils/constants";
 import React, { useEffect, useState, useContext } from "react";
-import confStandings from "../utils/standings2";
 import allStandings from "../utils/standings";
 import { MdExpandLess, MdExpandMore } from "react-icons/md";
 import { GameContext } from "../context/GameContext";
@@ -11,7 +10,7 @@ const Standing = ({name, toggle, data}) => {
 
     return (
         <div className="">
-            <div className={`conf_header flex flex-row ${name=='Eastern Conference' && 'mt-1'}  hover:text-[#00a2c7] hover:cursor-pointer border-t`} 
+            <div className="conf_header flex flex-row hover:text-[#00a2c7] hover:cursor-pointer border-t"
                 onClick={() => {setToggleStandings(!toggleExpansion); /*console.log(toggleExpansion);*/}}>
                 <h2 className=" ml-2 mr-2 w-40">{name}</h2>           
                 <div type="button" className="px-2 rounded-[2px] ">
@@ -72,28 +71,23 @@ const Standings = () => {
 
     const downloaStandings = async () => {
         try {
-                const endpoint =  `${standingsAPI}${seasonType}${currentSeason}?key=${sportsDataIOAPIKey}`; 
-
-                const response = await fetch(endpoint);
-                const data = await response.json();
-    
-                const eStandings = data
-                        .map(s => s)
-                        .sort((a,b) => b.Percentage - a.Percentage )
-                        .filter(s => s.Conference == "Eastern");
-                setEastStandings(eStandings);
-
-                const wStandings = data
-                        .map(s => s)
-                        .sort((a,b) =>  b.Percentage - a.Percentage)
-                        .filter(s => s.Conference == "Western");
-                setWestStandings(wStandings);
-
+            const env = process.env.NODE_ENV;
+            let standingsData = allStandings;
+            
+            if (env === 'production') {
+              const response = await fetch(`${standingsAPI}${seasonType}${currentSeason}?key=${sportsDataIOAPIKey}`);
+              standingsData = await response.json();
+            } 
+            
+            const sortedStandings = standingsData.sort((a, b) => b.Percentage - a.Percentage);
+            setEastStandings(sortedStandings.filter(s => s.Conference === "Eastern"));
+            setWestStandings(sortedStandings.filter(s => s.Conference === "Western"));
+            
         } catch(error){
             console.log(error);
         }
         finally {
-            
+            // console.log(process.env.NODE_ENV);
         }
     }
 

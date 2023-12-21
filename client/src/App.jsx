@@ -1,7 +1,7 @@
 import { useState, useContext, useRef } from "react";
-import { SelectComponent, GameComponent, Navbar, socialMedia, StandingComponent, Profile, Banner } from "./components"
+import { SelectComponent, GameComponent, Navbar, socialMedia, StandingComponent, ProfileComponent, 
+  Banner, TimerComponent, GeneralBannerComponent } from "./components"
 import { GameContext } from "./context/GameContext";
-import { FacebookShareButton, FacebookIcon } from 'react-share';
 import { IoMdCopy } from "react-icons/io";
 import { MdOutlineAttachEmail, MdOutlineShare, MdFacebook, MdEmail } from "react-icons/md";
 import { AiOutlineSchedule } from "react-icons/ai";
@@ -48,6 +48,7 @@ const App = () => {
   const handleCopy = (e) => {
     const text = BuildBet();
     navigator.clipboard.writeText(text);
+
     <Popup animationDuration={50} visible={isVisible} onClose={() => setIsVisible(false)}>
       <p>Votre pari a été copié dans le presse-papier!</p>
     </Popup>
@@ -106,15 +107,30 @@ const App = () => {
   const handleAvantApresChange = (e) => {
     setAvantApres(!e.value)
   }
+
+  const stats = [
+    { id: 1, name: 'Creators on the platform', value: '8,000+' },
+    { id: 2, name: 'Flat platform fee', value: '3%' },
+
+  ]
   
   return (  
     <div className="min-h-[210px] sm:px-0 sm:min-w-[360px]" >
         <div className={`${styles.paddingX} ${styles.flexCenter}`}>
           <div className={`${styles.boxWidth}`}>
             <section id="acceuil"> 
-              {dataIOCallStatus.statusCode == 403 && <Banner  message = {dataIOCallStatus.message.split(" ").reverse()[0]} />}
-              <Profile />
+              {dataIOCallStatus.statusCode == 403 && <Banner message = {dataIOCallStatus.message.split(" ").reverse()[0]} />}
+              {/* <GeneralBannerComponent className="flex"
+                 message="Bientôt, vous connecter a Facebook facilitera l'enregistrement de vos paris et le calcul automatique des points!"/> */}
+              <ProfileComponent />
               <Navbar />    
+              <div className="bg-gray-900 py-1 sm:py-1">
+                  <div className="mt-1  gap-0.5 text-center">
+                      <TimerComponent isLocal={false}/>
+                      <TimerComponent isLocal={true}/>
+                  </div>
+              </div>
+
               <div className="flex light-green xl:max-w-[1280px] w-full">
                     <div className="flex w-full justify-center items-center">
                         <div className=" ">
@@ -131,7 +147,7 @@ const App = () => {
                                   <MdFacebook className="rounded" color="blue" size={32} ></MdFacebook>
                                 </button>
                             )}
-                          </div>   
+                          </div> 
                           <GameComponent />
                           {isAllBets && (
                             <div  className="border rounded border-orange-600 my-1 md:mx-1 light-green border:animate-pulse"> 
@@ -150,13 +166,15 @@ const App = () => {
                                             </FacebookShareButton>
                                        </div> */}
                                       <IoMdCopy className=" hover:bg-[#00a2c7]/90   bg-orange-300 rounded text-orange-600" size={32} alt="Copy" 
-                                        title="Copier dans le presse-papier" onClick={() => handleCopy()}></IoMdCopy>                             
-                                      <a href="https://www.facebook.com/groups/680010455356375" target="_blank" title="Partager dans le groupe Franchise Players">
-                                        <div className="flex">
-                                          <MdOutlineShare className="rounded  hover:bg-[#00a2c7]/90  bg-orange-300 text-orange-600 ml-1"  size={32} ></MdOutlineShare>
-                                          {/* <img className="w-8 border bg-orange-200 hover:bg-orange-400 rounded -mx-2" src="/images/logo-fp.png"/> */}
-                                        </div>
-                                      </a>
+                                        title="Copier dans le presse-papier" onClick={() => handleCopy()}></IoMdCopy>    
+                                      <div onClick={() => { handleCopy();}}>
+                                                                                                  
+                                          <a href="https://www.facebook.com/groups/680010455356375" target="_blank" title="Partager dans le groupe Franchise Players">
+                                            <div className="flex">
+                                              <MdOutlineShare className="rounded  hover:bg-[#00a2c7]/90  bg-orange-300 text-orange-600 ml-1"  size={32} ></MdOutlineShare>
+                                            </div>
+                                          </a>
+                                      </div>   
                                       {/* {userProfile && ( */}
                                       {true && (
                                         <a href={`mailto:${fpEmail}?subject=${userProfile? userProfile.name:""} Pari du ${FrenchDate()}&body=${BuildBet()}`} >

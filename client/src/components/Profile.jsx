@@ -1,31 +1,39 @@
 
 import { LoginSocialFacebook } from "reactjs-social-login";
 import { FacebookLoginButton } from "react-social-login-buttons";
-import {BiLogIn, BiLogOut} from "react-icons/bi";
 import {FaSquareFacebook} from "react-icons/fa6";
-import {CgProfile} from "react-icons/cg";
 import { useState, useCallback, useEffect, useContext } from "react";
 import { GameContext } from "../context/GameContext";
+import TimerComponent from "./Timer";
+import moment from "moment";
  
-const Profile = () => {
+const ProfileComponent = () => {
     const {userProfile, setUserProfile} = useContext(GameContext);
     const [toggle, setToggle] = useState(false);
     const [loggingIn, setLoggingIn] = useState(false);
+    const [profileImageSrc, setProfileImageSrc] = useState(null);
   
     useEffect(() => {
-      const loggedInUser = localStorage.getItem("user");
+        const loggedInUser = localStorage.getItem("user");
+
+        if (loggedInUser) {
+            const userProfile = JSON.parse(loggedInUser);
+            setUserProfile(userProfile);
+        }
+     
     }, []);
 
     const onLoginStart = useCallback(() => {
-        // console.log(`onLoginStart... ${profile}`);
+        //THIS CODE SEEMS REDUNDANT as useEffect() is also handling this!!!
         //alert('login start');
         setLoggingIn(true);
         const loggedInUser = localStorage.getItem("user");
-        if (!loggedInUser) {
-            // console.log("Setting Profile...");
+        if (loggedInUser) {
             const foundUser =  JSON.parse(loggedInUser);
             setUserProfile(foundUser);
+            console.log("added user ", foundUser);
         }
+        else {console.log("no user found");}
         console.log(userProfile);
     }, []);
 
@@ -58,7 +66,7 @@ const Profile = () => {
     }
 
     return (
-        <div className="flex flex-wrap sm:justify-end mt-1 md:-mx-1">
+        <div className="flex flex-wrap sm:justify-end mt-1 md:-mx-1 flex-col items-end">
             <div className="flex flex-1 justify-end items-center relative">
                 <div className={`${!toggle ? "hidden" : "flex"} p-2 bg-black-gradient absolute top-8 -mx-20  my-2 min-w-[140px] rounded-xl sidebar`}>
                     <ul className="list-none flex justify-end items-start flex-1 flex-col text-[#e5faff]">
@@ -97,8 +105,18 @@ const Profile = () => {
             }             
             {userProfile && (
                 <div className="flex items-center mb-1" onClick={onProfileClick}>
-                    <h1 className="text-xs text-[#e5faff]">{userProfile.name}</h1>
-                    <img className="ml-1 rounded-full border-2 h-8 border-[#e5faff] text-white" alt="Photo" src={userProfile.picture.data.url} />
+                    <div className="flex flex-col items-end">
+                        <h1 className="text-xs text-[#e5faff]">{userProfile.name}</h1>
+                        {/* <TimerComponent isLocal={true}/> */}
+                    </div>
+
+                    <img className="text-xs items-center ml-1 h-8 border-[#e5faff] text-white" alt="Profil"
+                        src = {userProfile.picture.data.url}
+                        onError={event => {
+                            event.target.src = "./images/user-icon.png" //profileImageSrc
+                            event.onerror = null
+                      }}
+                    />
                 </div>
             )}
 
@@ -106,4 +124,4 @@ const Profile = () => {
     );
 }
 
-export default Profile;
+export default ProfileComponent;

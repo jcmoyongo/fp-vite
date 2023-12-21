@@ -69,7 +69,105 @@ export const ArrayToString = (arr, separator) => {
     }
 }
 
-export const getStatusColor = (status) => {
+export const getColorByDateTime = (game) => {
+    try {
+        const today = new Date();
+        const easternDate = new Date(today.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+        const gameDate = new Date(game.DateTime);
+
+        const diffInMilliseconds = easternDate - gameDate;
+        var diffInMinutes = diffInMilliseconds / 1000 / 60;
+        // console.log(`Game:${game.AwayTeam}-${game.HomeTeam} Diff:${diffInMinutes}`);
+
+        if (diffInMinutes >= 0) {
+            // console.log("text-red-600");
+            return "text-red-600"; // Game started
+          } else if (diffInMinutes >= -5) {
+            // console.log("text-red-400");
+            return "text-red-400"; // Game is very close to start
+          } else if (diffInMinutes >= -10) {
+            // console.log("text-orange-600");
+            return  "text-orange-600"; // Game is close to start
+          } else if (diffInMinutes >= -15) {
+            // console.log("text-blue-600");
+            return "text-blue-600"; // Game is not close to start
+          }
+          else {
+            return "";
+        }
+
+    } catch(error){
+        console.log(error);
+        return "";
+    }   
+}
+
+export const getObjectColorByDateTime = (game) => {
+    try {
+        const today = new Date();
+        const easternDate = new Date(today.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+        const gameDate = new Date(game.DateTime);
+
+        const diffInMilliseconds = easternDate - gameDate;
+        var diffInMinutes = diffInMilliseconds / 1000 / 60;
+        // console.log(`Game:${game.AwayTeam}-${game.HomeTeam} Diff:${diffInMinutes}`);
+        
+        if (diffInMinutes >= 0) {
+                return "text-red-600"; // Game started
+          } else if (diffInMinutes >= -5) {
+                return "text-red-400"; // Game is very close to start
+          } else if (diffInMinutes >= -10) {
+                return  "text-orange-600"; // Game is close to start
+          } else if (diffInMinutes >= -15) {
+                return "text-green-600"; // Game is not close to start
+          }
+          else {
+            return "";
+        }
+
+    } catch(error){
+        console.log(error);
+        return "";
+    }   
+}
+
+export const getStatusColors = (status, edge = 'l') => {
+    let border = edge === 'l'? 'border-l-':'border-';
+    let gameStatusColor = edge === 'l'? 
+        { background: '', border: '', text: ''}
+        :{ background: '', border: '', text: ''};
+        
+    
+    switch (status) {
+      case 'Scheduled':
+        gameStatusColor = { background: 'bg-green-600', border: 'border-l-green-600', text: 'text-green-600' };
+        break;
+      case 'InProgress':
+        gameStatusColor = { background: 'bg-red-600', border: 'border-l-red-600', text: 'text-red-600' };
+        break;
+      case 'Final':
+        gameStatusColor =  { background: 'bg-red-600', border: 'border-l-red-600', text:  'text-red-600'  };
+        break;
+      case 'F/OT':    
+        gameStatusColor =  { background: 'bg-red-600', border: 'border-l-red-600', text: 'text-red-600' };
+        break;
+      case 'NotNecessary':
+        gameStatusColor =  { background: 'bg-orange-600', border: 'border-l-orange-600', text: 'text-orange-600' };
+        break;
+      default:
+        gameStatusColor =  { background: '', border: '', text: '' };
+        break;
+    }
+
+    if (edge === '') {
+        gameStatusColor.border = gameStatusColor.border.replace('l-', '');
+    }
+
+    return gameStatusColor;
+    
+}
+
+export const getStatusTextColor = (status) => {
     //{`flex justify-center text-sm w-32 text-${color}-500`}>
     try {     
 
@@ -79,11 +177,35 @@ export const getStatusColor = (status) => {
             case "F/OT":
                 return "text-red-600";
             case "InProgress":
-                return "text-green-600"
+                return "text-red-600"
             case "Scheduled":
-                return "text-blue-600"
+                return "text-green-600"
             case "NotNecessary":
                 return "text-orange-600"
+            default:
+                return "";
+          }
+    } catch(error){
+        console.log(error);
+        return "";
+    }   
+}
+
+export const getStatusBorderColor = (status) => {
+    //{`flex justify-center text-sm w-32 text-${color}-500`}>
+    try {     
+
+        switch(status) {
+            case "Final":
+                return "border-l-red-600";
+            case "F/OT":
+                return "border-l-red-600";
+            case "InProgress":
+                return "border-l-red-600"
+            case "Scheduled":
+                return "border-l-red-600"
+            case "NotNecessary":
+                return "border-l-orange-600"
             default:
                 return "";
           }
@@ -213,4 +335,22 @@ export const timeAgo = (time) => {
   const lastUpdate = () => {
     const sched = games_sd.map(s => s);
      console.log(sched.map( g => {return moment(g.Updated).format('LLLL')}).reverse()[0]);
+  }
+
+  export const patchScheduleAPI = async (url, data) => {
+    //'https://api.example.com/items/1'
+    fetch(URLSearchParams, {
+    method: 'PATCH',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+    console.log('Success:', data);
+    })
+    .catch((error) => {
+    console.error('Error:', error);
+    });
   }

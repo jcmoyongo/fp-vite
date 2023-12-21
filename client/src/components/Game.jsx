@@ -1,8 +1,8 @@
 import React, {useContext, useState, useEffect} from "react";
 import { GameContext } from "../context/GameContext";
 import {RadioButtonComponent} from "../components/RadioButton"
-import {GetStadiumName, GetTeamAcronym, GetTeamName, getStatusColor, 
-    getSeriesStatus, getWinnerFontColor, translateStatus, timeAgo} from "../utils/helper";
+import {GetStadiumName, GetTeamAcronym, GetTeamName,  
+    getSeriesStatus, getWinnerFontColor, translateStatus, timeAgo, getObjectColorByDateTime, getStatusColors} from "../utils/helper";
 import moment from "moment";
 import 'moment/locale/fr';
 
@@ -11,6 +11,7 @@ const LoadingAnimation = () => {
     setTimeout(() => {
 
     }, 5000);
+
     return (
         <div className="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
             <div className="animate-pulse flex space-x-4">
@@ -33,14 +34,20 @@ const LoadingAnimation = () => {
 const Game = ({game}) =>{
     const [winner, setWinner] = useState();
     const {setGameList, dayGames, setIsAllBets, setBets, series, loading} = useContext(GameContext);
-    const [color, setColor] = useState();
+    const [statusColor, setStatusColor] = useState({ background: '', border: '', text: '' });
+    const [borderStatusColor, setBorderStatusColor] = useState({ background: '', border: '', text: '' });
     const [seriesStatus, setSeriesStatus] = useState("");
+    const [gameTimeColor, setGameTimeColor] = useState("");
+
+    const homeTeam = GetTeamName(game.HomeTeam);
+    const awayTeam = GetTeamName(game.AwayTeam);
 
     const radioChangeHandler = (e) => {
         //Update the winner in the day's list.
         setWinner(e.target.value);
         game.Winner = GetTeamAcronym( e.target.value);
-        //Update the game list with the latest winner
+        //Update the game list with the latest winner. 
+        //game is the game that was clicked on, an element of gameList, he list of games for the day.
         setGameList(dayGames);
         //This is how we know a winner has been selected for all of the day's games.
         const isAllBets = series.every(g => g.Winner !== "");
@@ -50,24 +57,31 @@ const Game = ({game}) =>{
         setBets(dayBets);
     };
 
-    const homeTeam = GetTeamName(game.HomeTeam);
-    const awayTeam = GetTeamName(game.AwayTeam);
-
     useEffect(() => { 
-        setColor(getStatusColor(game.Status));
+        setStatusColor(getStatusColors(game.Status));
+        setBorderStatusColor(getStatusColors(game.Status));
         //getSeriesStatus();
     }, [game]);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setGameTimeColor(getObjectColorByDateTime(game));
+            // console.log(getObjectColorByDateTime(game));
+        }, 1000);
+    
+        return () => clearInterval(intervalId); // This clears the interval when the component unmounts
+      }, []);
 
     return (
         (loading)
         ?
         <LoadingAnimation />
         :
-        <div className="flex flex-row w-full bg-white odd:bg-gray-50 border p-1 mb-1 hover:shadow-xl">
-            <div className="flex flex-row items-center w-full">
+        <div className={`flex flex-row w-full border p-1 mb-1 hover:shadow-xl`}>
+            <div className={`flex flex-row items-center w-full`}>
                 <div className="flex flex-col w-full">
                     {/* <p className="text-xs text-gray-400 mb-1 ">{getSeriesStatus(game)}</p> */}
-                    <div className="flex flex-row text-sm">
+                    <div className="flex flex-col text-sm">
                         <div className="flex justify-start items-center">
                             <RadioButtonComponent 
                                 changed={radioChangeHandler}
@@ -76,8 +90,11 @@ const Game = ({game}) =>{
                                 label={homeTeam}
                                 value={homeTeam}
                             />
-                        </div>                     
+                           
+                        </div>     
+                       
                     </div>
+                    
                     <div className="flex flex-row text-sm">
                         <div className="flex justify-start items-center">
                             <RadioButtonComponent 
@@ -89,25 +106,25 @@ const Game = ({game}) =>{
                             />
                         </div>          
                     </div>
-                    <div className="flex flex-col border-t-2 bg-gray-100 items-center ">  
+                    <div className="flex flex-col bg-gray-100 items-center">  
                         <p className="flex text-xs ">{GetStadiumName(game.StadiumID).Name}</p>
                     </div>
                 </div>         
             </div> 
-            <div className="flex flex-col items-left justify-center w-16">
-                <p className={`mx-1  ${getWinnerFontColor(game, game.HomeTeam)}`}>{game.HomeTeamScore}</p>
-                <p className={`mx-1  ${getWinnerFontColor(game, game.AwayTeam)}`}>{game.AwayTeamScore}</p>
+            <div className="flex flex-col items-left justify-center mb-4">
+                <p className={`mx-1 ${getWinnerFontColor(game, game.HomeTeam)}`}>{!game.HomeTeamScore?`     `:game.HomeTeamScore}</p> 
+                <p className={`mx-1 ${getWinnerFontColor(game, game.AwayTeam)}`}>{!game.AwayTeamScore?`     `:game.AwayTeamScore}</p>
             </div>
-            <div className="flex flex-col border-l-2 items-center justify-center w-36">       
-                <div className="flex text-sm">
+            <div className={`flex flex-col border-l-2 ${statusColor.border} items-center justify-center w-36`}>       
+                <div className={`flex text-sm`}>
                     {game.DateTime === null?"Pas fixée":moment(game.DateTime).format('LT')}
                 </div>
-                <div className={`flex text-center text-xs ${color}`}>
+                <div className={`flex text-center text-xs ${getObjectColorByDateTime(game)}`}>
                     {game.Status.toString().startsWith("F")
                     ? timeAgo(moment(game.GameEndDateTime))
                     : translateStatus(game.Status)}
                 </div>
-                <div className={`flex text-xs ${color}`}>
+                <div className={`flex text-xs ${statusColor.text}`}>
                     {game.Status === "F/OT"?"PROL":""}
                 </div>
             </div>             

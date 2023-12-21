@@ -22,6 +22,7 @@
     "react": "^18.2.0",
     "react-animated-popup": "^0.1.8",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.48.2",
     "react-icons": "^4.11.0",
     "react-select": "^5.7.2",
     "react-share": "^4.4.1",

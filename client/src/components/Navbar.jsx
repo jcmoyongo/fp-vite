@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
-import { navLinks } from ".";
+import { TimerComponent, navLinks } from ".";
 
 const Navbar = () => {
   const [active, setActive] = useState("Acceuil");
   const [toggle, setToggle] = useState(false);
-  
+
   return (
     <nav className={`w-full flex items-center  border-t-2 border-[#00a2c7]`}>
       <div className="flex flex-row items-center ">
@@ -23,11 +23,6 @@ const Navbar = () => {
           </li>
         ))}
       </ul>
-      {/* <fb:login-button scope="public_profile,email" onlogin={() => {checkLoginState();}} >
-      </fb:login-button> */}
-      {/* <div >
-              <Profile/>
-      </div> */}
       <div className="sm:hidden flex flex-1 justify-end items-center">
         <img
           src={toggle ? "././images/close.svg" : "././images/menu.svg"}

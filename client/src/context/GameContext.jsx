@@ -5,18 +5,18 @@ import teams from '../utils/teams'
 import games_sd from '../utils/games_sd'
 import getScheduleAsync from "../utils/api_calls/";
 import { scheduleAPI, sportsDataIOAPIKey, serieByDateAPI, dbHostURL, currentSeason, seasonType} from "../utils/constants"
-import {GetTeamName} from "../utils/helper";
+import { patchScheduleAPI} from "../utils/helper";
 
 export const GameContext = React.createContext();
 
 export const GameContextProvider = ({children}) => {
     const [formData, setformData] = useState({ dateSelected: "01/01/2000"});
-    const [gameList, setGameList] = useState(games.map(g => g));
-    const [scheduleList, setScheduleList ]= useState(games_sd.map(s => s));
+    const [gameList, setGameList] = useState([]);//useState(games.map(g => g));
+    const [scheduleList, setScheduleList ]= useState([]);//useState(games_sd.map(s => s));
     const [selectedDate, setSelectedDate] = useState(null);
     const [dayGames, setDayGames] = useState([]);
     const [isAllBets, setIsAllBets] =  useState(false);
-    const [allGames, setAllGames] = useState([]);//useState(games_sd.map(d => {return {...d, Winner:""}})); //We're adding the Winnder column to the array object.
+    const [allGames, setAllGames] = useState([]);
     const [teamList, setTeamList] = useState(teams.map(t => t));
     const [bets, setBets] = useState([]);
     const [series, setSeries] = useState([]); 
@@ -26,6 +26,7 @@ export const GameContextProvider = ({children}) => {
     const [loading, setLoading] = useState(false);
     const [dataIOCallStatus, setDataIOCallStatus] = useState({statusCode: 200, message: ""});
     const [userProfile, setUserProfile] = useState(null);
+    const [allGamesPatch, setAllGamesPatch] = useState(games_sd.map(s => s));
 
     const handleChange = (e) => {
         if (e === null) {
@@ -46,13 +47,24 @@ export const GameContextProvider = ({children}) => {
     const makeSchedule = async () => {
     //Must run after all games are downloaded
         try {
-            let uniqueDates = [
-                ...new Map(allGames.map((item) => [item["Day"], item])).values(),
-            ].map((game, key) =>{ 
-                return {id: key, value: moment(game.Day).format('L'), label:  moment(game.Day).format('L')}
-            }).filter(date => date.value >=  moment((new Date()).setDate((new Date()).getDate() - daysBack)).format('L') );
-            // moment((new Date()).setDate((new Date()).getDate() -X)).format('L') ); to back X days
-            setScheduleList(uniqueDates);
+            // let uniqueDates = [
+            //     ...new Map(allGames.map((item) => [item["Day"], item])).values()
+            // ].map((game, key) =>{ 
+            //     return {id: key, value: moment(game.Day).format('L'), label:  moment(game.Day).format('L')}
+            // })
+            // // .filter(date => date.value >=  moment((new Date()).setDate((new Date()).getDate() - daysBack)).format('L') );
+            // console.log(uniqueDates);
+            // setScheduleList(uniqueDates);
+
+            let filteredDates = allGames
+            .filter(game => moment().diff(moment(game.Day), 'days') <= daysBack)
+            .map(game => moment(game.Day).format('L'));
+          
+            let uniqueGameDates = [...new Set(filteredDates)].map((date, key) => {
+                return {id: key, value: date, label: date};
+            });
+
+            setScheduleList(uniqueGameDates);
         } catch(error){
             console.log(error);
         }
@@ -104,11 +116,9 @@ export const GameContextProvider = ({children}) => {
         }
         
         const diffInHours = (dt2, dt1) =>
-        {//
-            var diff =(dt2.getTime() - dt1.getTime()) / 1000;
-            diff /= (60 * 60);
-            const hours = Math.floor(diff);
-            return hours;     
+        {
+            var diff =(dt2.getTime() - dt1.getTime()) / 1000 / 60 / 60;
+            return Math.floor(diff);;     
         }
 
         const getScheduleFromDB = async () => {
@@ -127,11 +137,7 @@ export const GameContextProvider = ({children}) => {
                 const day = new Date(data.map( g => {return moment(g.Day)}).reverse()[0]);
                 const easternDateTime = new Date((new Date()).toLocaleString('en-US', { timeZone: 'America/New_York',}))
 
-                const diff = diffInHours(easternDateTime, lastUpdated);
-               
-                const stale = diffInHours(easternDateTime, lastUpdated) >= 1;
-
-                return stale;
+                return diffInHours(easternDateTime, lastUpdated) >= 1;
             } catch (error) {
                 console.log(error);
                 return false;
@@ -141,7 +147,7 @@ export const GameContextProvider = ({children}) => {
 
         const fetchScheduleFromAPI = async () => {
             const endpoint = `${scheduleAPI}${seasonYear}${seasonType}?key=${sportsDataIOAPIKey}`; 
-            // console.log(endpoint);
+
             try {
                 const response = await fetch(endpoint, {mode: 'cors'});
                 const data = await response.json();
@@ -178,12 +184,18 @@ export const GameContextProvider = ({children}) => {
             //var { data, lastUpdated } = await getScheduleFromDB();
             const isStale = true;// await isStaleSchedule(data, lastUpdated);
 
+            let env = process.env.NODE_ENV;
+            // env = 'development'; //Comment this line out to use dev data
             if (isStale) {
-                //Fetch from API, upsert DB, setAllGames
-                const gamesWithWinner =  await fetchScheduleFromAPI();
-                setAllGames(gamesWithWinner);
-                //await mergeSchedule(seasonYear, gamesWithWinner, lastUpdateTime);
-
+                if (env === 'development') {          
+                    const gamesWithWinner =  allGamesPatch.map(d => {return {...d, Winner:""}});
+                    setAllGames(gamesWithWinner);
+                } else if (env === 'production') {
+                    //Fetch from API, upsert DB, setAllGames
+                    const gamesWithWinner =  await fetchScheduleFromAPI();
+                    setAllGames(gamesWithWinner);
+                    //await mergeSchedule(seasonYear, gamesWithWinner, lastUpdateTime);
+                }
                 setIsRefreshed(true);
             } else {
                 setAllGames(data);
@@ -191,6 +203,9 @@ export const GameContextProvider = ({children}) => {
 
         } catch(error){
             console.log(error);
+        }
+        finally {
+            // console.log(process.env.NODE_ENV);
         }
     }
 

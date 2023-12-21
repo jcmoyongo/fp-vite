@@ -18,10 +18,35 @@ export const verifyToken  = (request, response, next) => {
                     message: "Non autorisé!",
                   });
                 }
-                request.userId = decoded.id;
+                request.userId = decoded.id; 
+                return response.status(200).send({
+                  message: new Date(decoded.iat) + ' ' + new Date(decoded.exp) //< new Date() ? "Le jeton a expiré!":"Le jeton est valide!",
+                });
                 next();
               });
 };
+
+export const isTokenExpired = (token) =>  {
+  try {
+    const decoded = jwt.decode(token);
+
+    if (!decoded || !decoded.exp) {
+      return true;
+    }
+
+    const expirationDate = new Date(decoded.exp * 1000);
+
+    if (expirationDate < new Date()) {
+      localStorage.removeItem('token');
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return true;
+  }
+}
 
 export const userBoard = (request, response) => {
   response.status(200).send("User Content.");
@@ -73,8 +98,6 @@ export const signIn = (request, response) => {
   
       if (results.length > 0) {
           const user = results[0];
-          console.log(user);
-          console.log(bcrypt.hashSync(request.body.password, 8));
 
           const passwordIsValid = bcrypt.compareSync(
             request.body.password,

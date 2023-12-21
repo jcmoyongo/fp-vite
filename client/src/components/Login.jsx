@@ -1,22 +1,10 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import { useForm } from "react-hook-form" //https://react-hook-form.com/get-started
 import { useState } from "react";
 
+
 export default function Login() {
   const [loggingIn, setLoggingIn] = useState(true)
+  const [error,setError]=useState();
 
   const {
 		register,
@@ -24,33 +12,79 @@ export default function Login() {
 		formState: { errors },
 	} = useForm();
 
-  const onSubmit = (data) => {
-		const userData = JSON.parse(localStorage.getItem(data.email));
-		if (userData) { 
-			if (userData.password === data.password) {
-				console.log(userData.name + " You Are Successfully Logged In");
-			} else {
-				console.log("Email or Password is not matching with our record");
-			}
-		} else {
-			console.log("Email or Password is not matching with our record");
-		}
+  const signInAsync = async (formData) => {
+    const endpoint = "http://localhost:3002/signin";
+
+    try {
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      const raw = JSON.stringify(formData);
+
+      const requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+        mode: 'cors'
+      };
+
+      const response = await fetch(endpoint, requestOptions);
+      const data = await response.json();
+      return data;
+
+    } catch(error){
+        console.log(error);
+        setError(error)
+    }
+  }
+
+  const registerAsync = async (formData) => {
+    const endpoint = "http://localhost:3002/signup";
+
+    try {
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      const raw = JSON.stringify({...formData, admin: false});
+
+      const requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+        mode: 'cors'
+      };
+
+      const response = await fetch(endpoint, requestOptions);
+      const data = await response.json();
+      return data;
+
+    } catch(error){
+      console.log(error);
+      setError(error);
+    }
+  }
+
+  const onSubmit = async (data) => {
+
+    if (loggingIn) {
+      const user = await signInAsync(data);
+      console.log("Logged in with: ", user)
+    }
+    else {
+      const user = await registerAsync(data);
+      console.log("Registered: ", user)
+    }
 	};
 
   const handleRegister = (e) => {
     setLoggingIn(!loggingIn);
-};
+    e.preventDefault();
+  };
   
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-white">
-        <body class="h-full">
-        ```
-      */}
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
@@ -60,34 +94,33 @@ export default function Login() {
             alt="Franchise Players Company"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
-            Sign in to your account
+          Connectez-vous à votre compte
           </h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
-
             {!loggingIn && 
             <div>
               <label htmlFor="name" className="block text-sm font-medium leading-6  text-white">
-                Name*
+                Nom*
               </label>
               <div className="mt-2">
                 <input 
                   id="email"
                   name="email"
-                  type="email" {...register("name", { required: true })}
+                  {...register("name", { required: true })}
                   // required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
                    placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-2"
                 />
-                {errors.name && <span style={{ color: "red" }}>Please enter your name.</span>}
+                {errors.name && <span style={{ color: "red" }}>Veuillez saisir votre nom.</span>}
               </div>
             </div>
           }
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-white">
-                Email address*
+                Nom d'utilisateur*
               </label>
               <div className="mt-2">
                 <input 
@@ -96,22 +129,23 @@ export default function Login() {
                   type="email" {...register("email", { required: true })}
                   autoComplete="email"
                   // required
+                  placeholder="jeandupont@fp.com"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
                    placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-2"
                 />
-                {errors.email && <span style={{ color: "red" }}>Please enter a valid email.</span>}
+                {errors.email && <span style={{ color: "red" }}>Veuillez saisir un courriel valide. </span>}
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between">
                 <label htmlFor="password" className="block text-sm font-medium leading-6 text-white">
-                  Password*
+                  Mot de passe*
                 </label>
                 {loggingIn &&
                   <div className="text-sm">
                     <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                      Forgot password?
+                      Vous avez oublié votre mot de passe?
                     </a>
                   </div>
                 }
@@ -126,7 +160,7 @@ export default function Login() {
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset
                    ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-2"
                 />
-                 {errors.password && <span style={{ color: "red" }}>Please enter your password.</span>}
+                 {errors.password && <span style={{ color: "red" }}>Veuillez saisir votre mot de passe.</span>}
               </div>
             </div>
 
@@ -135,23 +169,24 @@ export default function Login() {
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                {loggingIn?"Sign in": "Register"}
+                {loggingIn?"Connectez-vous": "Inscrivez-vous"}
               </button>
+              {error && <Label>{error}</Label>}    
             </div>
           </form>
 
           {loggingIn?
             <p className="mt-10 text-center text-sm text-gray-500">
-              Not a member?{' '}
+              Vous n'êtes pas membre?{' '}
               <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500" onClick={handleRegister}>
-                Register
+                Inscrivez-vous
               </a>
             </p>
             :
             <p className="mt-10 text-center text-sm text-gray-500">
-              Already a user?{' '}
+              Vous êtes membre?{' '}
               <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500" onClick={handleRegister}>
-                Sign in
+                Connectez-vous
               </a>
             </p>
           }

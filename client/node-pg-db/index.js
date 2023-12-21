@@ -62,6 +62,26 @@ app.get("/api/test/user", [verifyToken], userBoard);
 app.get('/verifytoken', verifyToken)
 app.post('/signup', [verifySignUp], signUp)
 app.post('/signin', signIn)
+app.post('/refresh', (req, res) => {
+  // Get refresh token from the request
+  const refreshToken = req.body.token;
+
+  if (!refreshToken) {
+    return res.sendStatus(401); // Unauthorized
+  }
+
+  // Verify the refresh token
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+    if (err) {
+      return res.sendStatus(403); // Forbidden
+    }
+
+    // If verification is successful, issue a new access token
+    const accessToken = jwt.sign({ name: user.name }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '20m' });
+
+    res.json({ accessToken });
+  });
+});
 
 /*
 https://thecodebarbarian.com/nodejs-12-imports
