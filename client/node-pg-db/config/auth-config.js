@@ -1,0 +1,1 @@
+export const secret = "thebugslayers-secret-key";
