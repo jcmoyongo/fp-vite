@@ -1,9 +1,11 @@
-import {getSchedule, createSchedule, updateSchedule, deleteSchedule, getScheduleBySeason, upsertSchedule} from './fp_model.js'
+import {getSchedule, createSchedule, updateSchedule, deleteSchedule, getScheduleBySeason, upsertSchedule} from './fp-model.js'
 import express from 'express'
 import bodyParser from 'body-parser'
 import compression from 'compression' //Compress HTTP response to reduce time
 import helmet from 'helmet' //Sets appropriate HTTP headers to protect agains web vulnerabilities
 import rateLimit from 'express-rate-limit' //Limit repeated requests to APIs and endpoints
+import { verifySignUp, signUp, signIn, verifyToken, userBoard } from './verify-signup.js'
+
 
 const app = express()
 const port = 3002
@@ -53,6 +55,33 @@ app.put('/schedule/merge', upsertSchedule)
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
 })
+
+// *** USER LOGIN
+//https://www.bezkoder.com/node-js-mongodb-auth-jwt/#google_vignette
+app.get("/api/test/user", [verifyToken], userBoard);
+app.get('/verifytoken', verifyToken)
+app.post('/signup', [verifySignUp], signUp)
+app.post('/signin', signIn)
+app.post('/refresh', (req, res) => {
+  // Get refresh token from the request
+  const refreshToken = req.body.token;
+
+  if (!refreshToken) {
+    return res.sendStatus(401); // Unauthorized
+  }
+
+  // Verify the refresh token
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+    if (err) {
+      return res.sendStatus(403); // Forbidden
+    }
+
+    // If verification is successful, issue a new access token
+    const accessToken = jwt.sign({ name: user.name }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '20m' });
+
+    res.json({ accessToken });
+  });
+});
 
 /*
 https://thecodebarbarian.com/nodejs-12-imports

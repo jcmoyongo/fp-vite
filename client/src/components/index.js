@@ -3,8 +3,10 @@ export { default as SelectComponent } from "./Select";
 export { default as RadioButtonComponent } from "./RadioButton";
 export { default as Navbar } from "./Navbar";
 export { default as StandingComponent } from "./Standing";
-export { default as Profile } from "./Profile";
+export { default as ProfileComponent } from "./Profile";
 export { default as Banner } from "./Banner";
+export { default as TimerComponent} from "./Timer";
+export {default as GeneralBannerComponent} from "./GeneralBanner";
 
 import { facebook, instagram, linkedin, twitter  } from "../assets"
 

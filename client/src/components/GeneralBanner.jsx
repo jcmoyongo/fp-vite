@@ -1,8 +1,8 @@
 import { ExclamationTriangleIcon } from '@heroicons/react/20/solid'
 
-const BannerComponent = ({message}) =>{
+const GeneralBannerComponent = ({message}) =>{
   return (
-    <div className="relative isolate flex items-center gap-x-6 overflow-hidden bg-gray-50 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
+    <div className="relative isolate flex items-center overflow-hidden bg-gray-50 py-1 sm:px-3.5 sm:before:flex-1">
       <div
         className="absolute left-[max(-7rem,calc(50%-52rem))] top-1/2 -z-10 -translate-y-1/2 transform-gpu blur-2xl"
         aria-hidden="true"
@@ -28,22 +28,14 @@ const BannerComponent = ({message}) =>{
         />
       </div>
       <p className="text-sm leading-6 text-red-900">
-        <a href="#">
           <strong className="font-semibold">Attention</strong>
           <svg viewBox="0 0 2 2" className="mx-2 inline h-0.5 w-0.5 fill-current" aria-hidden="true">
             <circle cx={1} cy={1} r={1} />
           </svg>
-          Hors quota de volume d'appels. Le quota sera reconstitué dans {message}&nbsp;        </a>
+          {message}
       </p>
-      <div className="flex flex-1 ">
-        <button type="button" className="-m-3 p-3 focus-visible:outline-offset-[-4px]">
-          <span className="sr-only">Dismiss</span>
-          {/* <XMarkIcon className="h-5 w-5 text-gray-900" aria-hidden="true" /> */}
-          <ExclamationTriangleIcon className="h-5 w-5  text-red-900" />
-        </button>
-      </div>
     </div>
   )
 }
 
-export default BannerComponent;
+export default GeneralBannerComponent;
