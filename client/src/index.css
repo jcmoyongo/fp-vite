@@ -249,6 +249,21 @@ td {
   color: var(--text-secondary); */
 }
 
+/*HOLIDAYS*/
+
+.holidayMessage {
+  font-size: 2em;
+  text-align: center;
+  animation: holidayAnimation 5s infinite;
+}
+
+@keyframes holidayAnimation {
+  0% {color: red;}
+  50% {color: green;}
+  100% {color: red;}
+}
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

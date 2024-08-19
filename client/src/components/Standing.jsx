@@ -6,7 +6,6 @@ import { GameContext } from "../context/GameContext";
 
 const Standing = ({name, toggle, data}) => {
     const [toggleExpansion, setToggleStandings] = useState(toggle);
-    const { dataIOCallStatus } = useContext(GameContext);
 
     return (
         <div className="">
@@ -25,10 +24,13 @@ const Standing = ({name, toggle, data}) => {
                             <div className="table-cell text-left border-r border-b pl-2 w-1/3">ÉQUIPE</div>
                             <div className="table-cell text-right border-b w-1/12">G</div>
                             <div className="table-cell text-right border-b w-1/12">P</div>
+                            <div className="table-cell text-right border-b w-1/12 font-semibold">PPGP</div>
+                            <div className="table-cell text-right border-b w-1/12 font-semibold">PPGC</div>
+                            <div className="table-cell text-right border-b w-1/12 font-semibold">SUR10</div>
                             <div className="table-cell text-right border-b w-1/12">%GAGNÉ</div>
                             <div className="table-cell text-right border-b w-1/12">DERR</div>
-                            <div className="table-cell text-right border-b w-1/12">EST</div>
-                            <div className="table-cell text-right border-b pr-2 w-1/12">OUEST</div>
+                            {/* <div className="table-cell text-right border-b w-1/12 ">EST</div> */}
+                            <div className="table-cell text-right border-b pl-2 pr-1 w-1/12">{name.split(" ").pop().toUpperCase() === 'EST'? "OUEST":"EST"}</div>
                         </div>
                     </div> 
                     <div className="table-row-group">
@@ -48,10 +50,16 @@ const Standing = ({name, toggle, data}) => {
                                 </div>
                                 <div className="table-cell text-right">{stdg.Wins}</div>
                                 <div className="table-cell text-right">{stdg.Losses}</div>
+                                <div className="table-cell text-right pl-1">{stdg.PointsPerGameFor}</div>
+                                <div className="table-cell text-right pl-1">{stdg.PointsPerGameAgainst}</div>
+                                <div className="table-cell text-right">{stdg.LastTenWins}</div>
                                 <div className="table-cell text-right">{stdg.Percentage}</div>
                                 <div className="table-cell text-right">{stdg.GamesBack}</div>
-                                <div className="table-cell text-right">{stdg.ConferenceWins}-{stdg.ConferenceLosses}</div>
-                                <div className="table-cell text-right pr-2">{stdg.Wins-stdg.ConferenceWins}-{stdg.Losses-stdg.ConferenceLosses}</div>
+                                {
+                                    stdg.Name.split(" ").pop().toUpperCase() === 'EST' 
+                                     ? <div className="table-cell text-right pr-2">{stdg.Wins-stdg.ConferenceWins}-{stdg.Losses-stdg.ConferenceLosses}</div>
+                                     : <div className="table-cell text-right pr-2">{stdg.ConferenceWins}-{stdg.ConferenceLosses}</div>
+                                }
                             </div>
                         ))}
                     </div>
@@ -68,13 +76,14 @@ const Standings = () => {
     const [westStandings, setWestStandings] =  useState([]);
     const [toggleEast, setToggleEast] =  useState(false);
     const [toggleWest, setToggleWest] =  useState(false);
+    const { dataIOCallStatus } = useContext(GameContext);
 
     const downloaStandings = async () => {
         try {
             const env = process.env.NODE_ENV;
             let standingsData = allStandings;
             
-            if (env === 'production') {
+            if (env === 'production' && dataIOCallStatus.statusCode != undefined) {
               const response = await fetch(`${standingsAPI}${seasonType}${currentSeason}?key=${sportsDataIOAPIKey}`);
               standingsData = await response.json();
             } 

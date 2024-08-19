@@ -16,7 +16,7 @@ const TimerComponent = ({isLocal}) => {
             setUserDateTime((new Date()).toLocaleString('fr-FR', { timeZone: timeZone }));
         } else {
             const date = new Date(); 
-            const easternDate = new Date(date.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+            const easternDate = date.toLocaleString('fr-FR', { timeZone: 'America/New_York', timeZoneName: 'short' });
             setEasternDateTime(easternDate);
         }
     }, 1000);

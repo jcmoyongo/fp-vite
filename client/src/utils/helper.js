@@ -1,7 +1,10 @@
 import {useContext, useState} from "react";
 import {GameContext} from "../context/GameContext"
 import stadiums from "./stadiums";
-import teams from '../utils/teams'
+import teams from '../utils/teams';
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 export const SeasonType = {
         Regular: 1,
@@ -69,38 +72,38 @@ export const ArrayToString = (arr, separator) => {
     }
 }
 
-export const getColorByDateTime = (game) => {
-    try {
-        const today = new Date();
-        const easternDate = new Date(today.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-        const gameDate = new Date(game.DateTime);
+// export const getColorByDateTime = (game) => {
+//     try {
+//         const today = new Date();
+//         const easternDate = new Date(today.toLocaleString('enUS', { timeZone: 'America/New_York' }));
+//         const gameDate = new Date(game.DateTime);
 
-        const diffInMilliseconds = easternDate - gameDate;
-        var diffInMinutes = diffInMilliseconds / 1000 / 60;
-        // console.log(`Game:${game.AwayTeam}-${game.HomeTeam} Diff:${diffInMinutes}`);
+//         const diffInMilliseconds = easternDate  gameDate;
+//         var diffInMinutes = diffInMilliseconds / 1000 / 60;
+//         // console.log(`Game:${game.AwayTeam}${game.HomeTeam} Diff:${diffInMinutes}`);
 
-        if (diffInMinutes >= 0) {
-            // console.log("text-red-600");
-            return "text-red-600"; // Game started
-          } else if (diffInMinutes >= -5) {
-            // console.log("text-red-400");
-            return "text-red-400"; // Game is very close to start
-          } else if (diffInMinutes >= -10) {
-            // console.log("text-orange-600");
-            return  "text-orange-600"; // Game is close to start
-          } else if (diffInMinutes >= -15) {
-            // console.log("text-blue-600");
-            return "text-blue-600"; // Game is not close to start
-          }
-          else {
-            return "";
-        }
+//         if (diffInMinutes >= 0) {
+//             // console.log("textred600");
+//             return "textred600"; // Game started
+//           } else if (diffInMinutes >= 5) {
+//             // console.log("textred400");
+//             return "textred400"; // Game is very close to start
+//           } else if (diffInMinutes >= 10) {
+//             // console.log("textorange600");
+//             return  "textorange600"; // Game is close to start
+//           } else if (diffInMinutes >= 15) {
+//             // console.log("textblue600");
+//             return "textblue600"; // Game is not close to start
+//           }
+//           else {
+//             return "";
+//         }
 
-    } catch(error){
-        console.log(error);
-        return "";
-    }   
-}
+//     } catch(error){
+//         console.log(error);
+//         return "";
+//     }   
+// }
 
 export const getObjectColorByDateTime = (game) => {
     try {
@@ -130,9 +133,8 @@ export const getObjectColorByDateTime = (game) => {
         return "";
     }   
 }
-
 export const getStatusColors = (status, edge = 'l') => {
-    let border = edge === 'l'? 'border-l-':'border-';
+    let border = edge === 'l'? 'borderl':'border';
     let gameStatusColor = edge === 'l'? 
         { background: '', border: '', text: ''}
         :{ background: '', border: '', text: ''};
@@ -140,19 +142,22 @@ export const getStatusColors = (status, edge = 'l') => {
     
     switch (status) {
       case 'Scheduled':
-        gameStatusColor = { background: 'bg-green-600', border: 'border-l-green-600', text: 'text-green-600' };
+        gameStatusColor = { background: 'bggreen600', border: 'borderlgreen600', text: 'textgreen600' };
         break;
       case 'InProgress':
-        gameStatusColor = { background: 'bg-red-600', border: 'border-l-red-600', text: 'text-red-600' };
+        gameStatusColor = { background: 'bgred600', border: 'borderlred600', text: 'textred600' };
         break;
       case 'Final':
-        gameStatusColor =  { background: 'bg-red-600', border: 'border-l-red-600', text:  'text-red-600'  };
+        gameStatusColor =  { background: 'bgred600', border: 'borderlred600', text:  'textred600'  };
         break;
       case 'F/OT':    
-        gameStatusColor =  { background: 'bg-red-600', border: 'border-l-red-600', text: 'text-red-600' };
+        gameStatusColor =  { background: 'bgred600', border: 'borderlred600', text: 'textred600' };
         break;
       case 'NotNecessary':
-        gameStatusColor =  { background: 'bg-orange-600', border: 'border-l-orange-600', text: 'text-orange-600' };
+        gameStatusColor =  { background: 'bgorange600', border: 'borderlorange600', text: 'textorange600' };
+        break;
+      case 'Static':
+        gameStatusColor = { background: 'bggray400', border: 'borderlgray400', text: 'textgray400' };
         break;
       default:
         gameStatusColor =  { background: '', border: '', text: '' };
@@ -160,7 +165,7 @@ export const getStatusColors = (status, edge = 'l') => {
     }
 
     if (edge === '') {
-        gameStatusColor.border = gameStatusColor.border.replace('l-', '');
+        gameStatusColor.border = gameStatusColor.border.replace('l', '');
     }
 
     return gameStatusColor;
@@ -168,20 +173,22 @@ export const getStatusColors = (status, edge = 'l') => {
 }
 
 export const getStatusTextColor = (status) => {
-    //{`flex justify-center text-sm w-32 text-${color}-500`}>
+    //{`flex justifycenter textsm w32 text${color}500`}>
     try {     
 
         switch(status) {
             case "Final":
-                return "text-red-600";
+                return "textred600";
             case "F/OT":
-                return "text-red-600";
+                return "textred600";
             case "InProgress":
-                return "text-red-600"
+                return "textred600"
             case "Scheduled":
-                return "text-green-600"
+                return "textgreen600"
             case "NotNecessary":
-                return "text-orange-600"
+                return "textorange600"
+            case "Static":
+                return "textred600";
             default:
                 return "";
           }
@@ -192,20 +199,22 @@ export const getStatusTextColor = (status) => {
 }
 
 export const getStatusBorderColor = (status) => {
-    //{`flex justify-center text-sm w-32 text-${color}-500`}>
+    //{`flex justifycenter textsm w32 text${color}500`}>
     try {     
 
         switch(status) {
             case "Final":
-                return "border-l-red-600";
+                return "borderlred600";
             case "F/OT":
-                return "border-l-red-600";
+                return "borderlred600";
             case "InProgress":
-                return "border-l-red-600"
+                return "borderlred600"
             case "Scheduled":
-                return "border-l-red-600"
+                return "borderlred600"
             case "NotNecessary":
-                return "border-l-orange-600"
+                return "borderlorange600"
+            case "Static":
+                return "borderlred600";
             default:
                 return "";
           }
@@ -230,6 +239,8 @@ export const translateStatus = (status) => {
                 return "Pas Nécessaire"
             case "Canceled":
                 return "Annulé"
+            case "Static":
+                return "Non actualisé";
             default:
                 return status;
           }
@@ -240,13 +251,17 @@ export const translateStatus = (status) => {
 }
 
 export const getWinnerFontColor = (game, team) => {
-    //{`flex justify-center text-sm w-32 text-${color}-500`}>
+    //{`flex justifycenter textsm w32 text${color}500`}>
     try {     
         switch(team) {
             case game.HomeTeam:
-                return game.HomeTeamScore < game.AwayTeamScore?"text-gray-400":"";
+                return game.HomeTeamScore?
+                 game.HomeTeamScore < game.AwayTeamScore?"textgray400":""
+                 :"text[#e5faff]";
             case game.AwayTeam:
-                return game.AwayTeamScore < game.HomeTeamScore?"text-gray-400":"";
+                return game.AwayTeamScore?
+                 game.AwayTeamScore < game.HomeTeamScore?"textgray400":""
+                 :"text[#e5faff]"
             default:
                 return "";
           }
@@ -259,18 +274,18 @@ export const getWinnerFontColor = (game, team) => {
 export const getSeriesStatus = (game) => {
     const series = game.SeriesInfo;
     let message;
-    if (series.GameNumber === undefined || series.GameNumber === 0) { message = "Série en attente (0 - 0 )"}
+    if (series.GameNumber === undefined || series.GameNumber === 0) { message = "Série en attente (0  0 )"}
     if (series.GameNumber > 0) {
         if (series.HomeTeamWins > series.AwayTeamWins) {
             message = series.HomeTeamWins == 4
-                ? `${game.HomeTeam} a gagné ${series.HomeTeamWins} - ${series.AwayTeamWins}`
-                : `Match ${series.GameNumber} (${game.HomeTeam} mène ${series.HomeTeamWins} - ${series.AwayTeamWins})`;
+                ? `${game.HomeTeam} a gagné ${series.HomeTeamWins}  ${series.AwayTeamWins}`
+                : `Match ${series.GameNumber} (${game.HomeTeam} mène ${series.HomeTeamWins}  ${series.AwayTeamWins})`;
         } else if (series.HomeTeamWins < series.AwayTeamWins) {
             message = series.AwayTeamWins == 4
-            ? `${game.AwayTeam} a gagné ${series.AwayTeamWins} - ${series.HomeTeamWins}`
-            : `Match ${series.GameNumber} (${game.AwayTeam} mène ${series.AwayTeamWins} - ${series.HomeTeamWins})`
+            ? `${game.AwayTeam} a gagné ${series.AwayTeamWins}  ${series.HomeTeamWins}`
+            : `Match ${series.GameNumber} (${game.AwayTeam} mène ${series.AwayTeamWins}  ${series.HomeTeamWins})`
         } else {
-            message = `Match ${series.GameNumber} (Série à égalité ${series.HomeTeamWins} - ${series.AwayTeamWins})`
+            message = `Match ${series.GameNumber} (Série à égalité ${series.HomeTeamWins}  ${series.AwayTeamWins})`
         }
     }
     return message;
@@ -295,20 +310,20 @@ export const timeAgo = (time) => {
       [120, '1 minute', 'Dans 1 minute'], // 60*2
       [3600, 'minutes', 60], // 60*60, 60
       [7200, '1 heure', 'Dans 1 heure'], // 60*60*2
-      [172799, 'heures', 3600], // 60*60*24, 60*60 --ORIGINAL:   [86400, 'heures', 3600], // 60*60*24, 60*60
+      [172799, 'heures', 3600], // 60*60*24, 60*60 ORIGINAL:   [86400, 'heures', 3600], // 60*60*24, 60*60
       [172800, 'Hier', 'Demain'], // 60*60*24*2
       [604800, 'jours', 86400], // 60*60*24*7, 60*60*24
       [1209600, '1 semaine', 'Prochaine sem'], // 60*60*24*7*4*2
       [2419200, 'semaines', 604800], // 60*60*24*7*4, 60*60*24*7
       [4838400, '1 mois', 'Mois prochain'], // 60*60*24*7*4*2
       [29030400, 'mois', 2419200], // 60*60*24*7*4*12, 60*60*24*7*4
-      [58060800, '1 an', '-1 an'], // 60*60*24*7*4*12*2
+      [58060800, '1 an', '1 an'], // 60*60*24*7*4*12*2
       [2903040000, 'années', 29030400], // 60*60*24*7*4*12*100, 60*60*24*7*4*12
-      [5806080000, '1 siècle', '-1 siècle'], // 60*60*24*7*4*12*100*2
+      [5806080000, '1 siècle', '1 siècle'], // 60*60*24*7*4*12*100*2
       [58060800000, 'siècle', 2903040000] // 60*60*24*7*4*12*100*20, 60*60*24*7*4*12*100
     ];
     var seconds = (new Date() - time) / 1000,
-      token = '+',
+      token = '',
       list_choice = 1;
     if (seconds == 0) {
       return 'Maintenant'
@@ -321,7 +336,7 @@ export const timeAgo = (time) => {
     var i = 0,
     format; 
 
-    while (format = time_formats[i++])
+    while (format = time_formats[i])
       if (seconds < format[0]) {
         if (typeof format[2] == 'string')
           return format[list_choice];
@@ -342,7 +357,7 @@ export const timeAgo = (time) => {
     fetch(URLSearchParams, {
     method: 'PATCH',
     headers: {
-        'Content-Type': 'application/json',
+        'ContentType': 'application/json',
     },
     body: JSON.stringify(data),
     })

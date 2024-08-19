@@ -7,6 +7,7 @@ export { default as ProfileComponent } from "./Profile";
 export { default as Banner } from "./Banner";
 export { default as TimerComponent} from "./Timer";
 export {default as GeneralBannerComponent} from "./GeneralBanner";
+export {default as HolidayComponent} from "./Holiday";
 
 import { facebook, instagram, linkedin, twitter  } from "../assets"
 

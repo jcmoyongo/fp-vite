@@ -4,7 +4,8 @@ import games from '../utils/games'
 import teams from '../utils/teams'
 import games_sd from '../utils/games_sd'
 import getScheduleAsync from "../utils/api_calls/";
-import { scheduleAPI, sportsDataIOAPIKey, serieByDateAPI, dbHostURL, currentSeason, seasonType} from "../utils/constants"
+import { scheduleAPI, postSeasonAPI, sportsDataIOAPIKey, serieByDateAPI, dbHostURL, 
+    currentSeason, seasonType, ENVIRONMENT} from "../utils/constants"
 import { patchScheduleAPI} from "../utils/helper";
 
 export const GameContext = React.createContext();
@@ -28,7 +29,7 @@ export const GameContextProvider = ({children}) => {
     const [userProfile, setUserProfile] = useState(null);
     const [allGamesPatch, setAllGamesPatch] = useState(games_sd.map(s => s));
 
-    const handleChange = (e) => {
+    const selectHandleChange = (e) => {
         if (e === null) {
             setSeries([]);
             setSelectedDate(null);
@@ -57,7 +58,7 @@ export const GameContextProvider = ({children}) => {
             // setScheduleList(uniqueDates);
 
             let filteredDates = allGames
-            .filter(game => moment().diff(moment(game.Day), 'days') <= daysBack)
+            .filter(game => moment().diff(moment(game.Day), 'days') <= 1)
             .map(game => moment(game.Day).format('L'));
           
             let uniqueGameDates = [...new Set(filteredDates)].map((date, key) => {
@@ -80,25 +81,23 @@ export const GameContextProvider = ({children}) => {
             return [year, month, day].join('-');
         }
         try {
-                //console.log("Fetching series...");
-                const fmtDate = formatDate(new Date(date));
-                const endpoint =  `${serieByDateAPI}${fmtDate}?key=${sportsDataIOAPIKey}`; 
-
-                const response = await fetch(endpoint);
-                const data = await response.json();
-
-                const dayGames = allGames.map(serie => {return {...serie, Winner:""}}).filter(g => moment(g.Day).format('L') === date);
-                const firstGame = dayGames[0];
+                //console.log("Fetching series...");           
                 const now = (new Date()).getTime();
+                let daySeries = [];
 
-                if (now < (new Date(firstGame.DateTime)).getTime()) {
-                    // console.log("Future games");
-                    setSeries(dayGames);
+                // console.log(ENVIRONMENT);
+                if (ENVIRONMENT === 'development') {
+                    daySeries = allGames.map(serie => {return {...serie, Winner:""}})
+                                .filter(g => moment(g.Day).format('L') === date)
                 } else {
-                    // console.log("Active/Past games");
-                    const daySeries = data.map(serie => {return {...serie, Winner:""}}).sort((a,b) => new Date(a.DateTime) - new Date(b.DateTime)); 
-                    setSeries(daySeries);
+                    const response = await fetch(`${serieByDateAPI}${formatDate(new Date(date))}?key=${sportsDataIOAPIKey}`, {mode: 'cors'});
+                    const data = await response.json();
+                    daySeries = data.map(serie => {return {...serie, Winner:""}}).filter(s => s.Status !== "Canceled");
                 }
+
+                daySeries.sort((a,b) => new Date(a.DateTime) - new Date(b.DateTime));
+                setSeries(daySeries);
+
         } catch(error){
             console.log(error);
         }
@@ -146,16 +145,21 @@ export const GameContextProvider = ({children}) => {
         }
 
         const fetchScheduleFromAPI = async () => {
-            const endpoint = `${scheduleAPI}${seasonYear}${seasonType}?key=${sportsDataIOAPIKey}`; 
-
             try {
+                const endpoint = `${postSeasonAPI}${seasonYear}${seasonType}?key=${sportsDataIOAPIKey}`; 
                 const response = await fetch(endpoint, {mode: 'cors'});
                 const data = await response.json();
+
                 setDataIOCallStatus({statusCode: data.statusCode, message: data.message});
 
-                return data.map(d => {return {...d, Winner:""}});
+                if (data.statusCode === 403) {
+                    return [];
+                } else { 
+                    return data.map(d => {return {...d, Winner:""}});
+                }
+
             } catch(error){
-                // console.log("error");
+                console.log(error);
             }
         }
 
@@ -184,21 +188,33 @@ export const GameContextProvider = ({children}) => {
             //var { data, lastUpdated } = await getScheduleFromDB();
             const isStale = true;// await isStaleSchedule(data, lastUpdated);
 
-            let env = process.env.NODE_ENV;
-            // env = 'development'; //Comment this line out to use dev data
+            let env = ENVIRONMENT;
+            let gamesWithWinner = await fetchScheduleFromAPI();
+
             if (isStale) {
-                if (env === 'development') {          
-                    const gamesWithWinner =  allGamesPatch.map(d => {return {...d, Winner:""}});
+                if (env === 'development') {     
+                    let now = new Date();   
+                    gamesWithWinner =  allGamesPatch.map(d => {
+                        if (now > (new Date(d.DateTime)).getTime()) {
+                            return {
+                                ...d, 
+                                Status: d.AwayTeamScore ? d.Status: "Static", 
+                                Winner: ""
+                              }
+                        } else {
+                            return {...d, Winner: ""};
+                        }
+                    });
                     setAllGames(gamesWithWinner);
                 } else if (env === 'production') {
-                    //Fetch from API, upsert DB, setAllGames
-                    const gamesWithWinner =  await fetchScheduleFromAPI();
+                    // gamesWithWinner =  await fetchScheduleFromAPI();
                     setAllGames(gamesWithWinner);
-                    //await mergeSchedule(seasonYear, gamesWithWinner, lastUpdateTime);
+                    //await mergeSchedule(seasonYear, gamesWithWinner, lastUpdateTime); For when the DB is online.
+                    //setIsRefreshed(true);
                 }
-                setIsRefreshed(true);
+
             } else {
-                setAllGames(data);
+                // setAllGames(data);
             }      
 
         } catch(error){
@@ -219,7 +235,7 @@ export const GameContextProvider = ({children}) => {
         <GameContext.Provider
           value={{scheduleList, 
             gameList, setGameList, 
-            selectedDate, setSelectedDate, handleChange, formData, 
+            selectedDate, setSelectedDate, handleChange: selectHandleChange, formData, 
             dayGames, setDayGames, isAllBets, setIsAllBets, 
             allGames, teamList, bets, setBets, downloadSeries, series, loading, dataIOCallStatus,
             userProfile, setUserProfile}}
