@@ -23,7 +23,7 @@ export const GameContextProvider = ({children}) => {
     const [series, setSeries] = useState([]); 
     const [isRefreshed, setIsRefreshed] = useState(); 
     const [daysBack, setDaysBack] = useState(3);
-    const [seasonYear, setSeasonYear] = useState(2024);
+    const [seasonYear, setSeasonYear] = useState(2025);
     const [loading, setLoading] = useState(false);
     const [dataIOCallStatus, setDataIOCallStatus] = useState({statusCode: 200, message: ""});
     const [userProfile, setUserProfile] = useState(null);
@@ -44,6 +44,9 @@ export const GameContextProvider = ({children}) => {
         setIsAllBets(false);
         setBets([]);
     };
+
+    // alias kept for compatibility with components expecting handleChange
+    const handleChange = (e) => selectHandleChange(e);
 
     const makeSchedule = async () => {
     //Must run after all games are downloaded
@@ -146,16 +149,25 @@ export const GameContextProvider = ({children}) => {
 
         const fetchScheduleFromAPI = async () => {
             try {
-                const endpoint = `${postSeasonAPI}${seasonYear}${seasonType}?key=${sportsDataIOAPIKey}`; 
+                const endpoint = `${scheduleAPI}${seasonYear}?key=${sportsDataIOAPIKey}`; 
+                console.log(endpoint);
                 const response = await fetch(endpoint, {mode: 'cors'});
                 const data = await response.json();
 
-                setDataIOCallStatus({statusCode: data.statusCode, message: data.message});
-
-                if (data.statusCode === 403) {
+                // Handle both API shapes: { statusCode, message, data } or direct array
+                if (data && typeof data === 'object' && !Array.isArray(data)) {
+                    setDataIOCallStatus({statusCode: data.statusCode ?? 200, message: data.message ?? ''});
+                    if (data.statusCode === 403) {
+                        return [];
+                    }
+                    const payload = Array.isArray(data.data) ? data.data : [];
+                    return payload.map(d => ({ ...d, Winner: "" }));
+                } else if (Array.isArray(data)) {
+                    setDataIOCallStatus({statusCode: 200, message: ''});
+                    return data.map(d => ({ ...d, Winner: "" }));
+                } else {
+                    setDataIOCallStatus({statusCode: 500, message: 'Unexpected response'});
                     return [];
-                } else { 
-                    return data.map(d => {return {...d, Winner:""}});
                 }
 
             } catch(error){
@@ -235,7 +247,7 @@ export const GameContextProvider = ({children}) => {
         <GameContext.Provider
           value={{scheduleList, 
             gameList, setGameList, 
-            selectedDate, setSelectedDate, handleChange: selectHandleChange, formData, 
+            selectedDate, setSelectedDate, handleChange, selectHandleChange, formData, 
             dayGames, setDayGames, isAllBets, setIsAllBets, 
             allGames, teamList, bets, setBets, downloadSeries, series, loading, dataIOCallStatus,
             userProfile, setUserProfile}}

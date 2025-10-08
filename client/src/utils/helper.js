@@ -53,12 +53,12 @@ export const  GetTeamAcronym = (name) => {
     }   
 }
 
-export const GetStadiumName = (id) => {
+export const GetStadiumName = (id) => { 
     try {
-        return stadiums.map(stadium => stadium).find(s => s.StadiumID === id);
+        return stadiums.find(s => s.StadiumID == id).Name;
     } catch(error){
         console.log(`Stadium ID ${id} NOT FOUND ${error}`);
-        return "";
+        return "*Nouveau";
     }
 }
 

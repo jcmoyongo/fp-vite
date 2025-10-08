@@ -76,8 +76,7 @@ const Game = ({game}) =>{
         // })[0]);
 
         let tempSeries = series.map(g => ({...g, DateTime: dayjs(g.DateTime)}));
-        console.log(tempSeries);
-        console.log(tempSeries.filter(g=>g.DateTime <=  (new Date()).getTime()));
+
         let dayBets = env === "development"?
             tempSeries.filter(g => g.Status == "Static" && (new Date(g.DateTime)).getTime() <=  (new Date()).getTime()).map(g => g.Winner):
             series.filter(g => g.Status == "Scheduled").map(g => g.Winner);
@@ -108,7 +107,7 @@ const Game = ({game}) =>{
         <div className={`flex flex-row w-full border p-1 mb-1 hover:shadow-xl`}>
             <div className={`flex flex-row items-center w-full`}>
                 <div className="flex flex-col w-full">
-                    <p className="text-xs text-gray-400 mb-1 ">{getSeriesStatus(game)}</p> 
+                    {/* <p className="text-xs text-gray-400 mb-1 ">{getSeriesStatus(game)}</p>  */}
                     <div className="flex flex-col text-sm">
                         <div className="flex justify-start items-center">
                             <RadioButtonComponent 
@@ -132,7 +131,7 @@ const Game = ({game}) =>{
                         </div>          
                     </div>
                     <div className="flex flex-col bg-gray-100 items-center">  
-                        <p className="flex text-xs ">{GetStadiumName(game.StadiumID).Name}</p>
+                        <p className="flex text-xs ">{GetStadiumName(game.StadiumID)}</p>
                     </div>
                 </div>         
             </div> 

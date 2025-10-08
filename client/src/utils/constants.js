@@ -1,7 +1,7 @@
 export const facebookAppID = "1561062554263407";
 export const facebookJSSDK = "https://connect.facebook.net/en_US/sdk.js"
 export const sportsDataIOAPIKey = "357fa5f8551c41cea6afc56a1345c611";
-export const currentSeason = 2024;
+export const currentSeason = 2025;
 export const seasonType = "POST";
 export const dbHostURL = "http://localhost:3002";
 export const fpEmail = "admin@franchise-players.com"
